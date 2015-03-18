@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "egovframework.www.mgr.master.service.impl.MgrMasterMapper">
+	<sql id="pagingTop">
+		;With Cust AS (
+	</sql>
+	
+	<sql id="rowNumber">
+		ROW_NUMBER() OVER (order by ${obfield} desc) as RowNumber
+	</sql>
+	
+	<sql id="pagingBtm">
+		)
+			select * from Cust Where RowNumber Between #{pageIndex,jdbcType=INTEGER} and #{pageUnit,jdbcType=INTEGER} 
+	</sql>
+	
+	<!-- 관리자 그룹 Select -->
+	<select id="mgrGroupList" parameterType="groupVO" resultType="groupVO">
+		SELECT GROUP_SQ,GROUP_NM,USE_FL,REG_DT FROM MST_GROUP_TD
+		<where>
+			GROUP_NM != 'super' 
+		</where>
+	</select>
+	
+	<!-- 관리자 그룹 update -->
+	<update id="mgrGroupUpdate" parameterType="hashMap" statementType="PREPARED">
+		UPDATE 
+			MST_GROUP_TD
+		SET
+			USE_FL = #{use_fl,jdbcType=VARCHAR}
+		WHERE
+			GROUP_SQ = #{group_sq,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 지부관리자 계정 수 -->
+	<select id="mgrAccountCnt" parameterType="accountVO" resultType="Int">
+		SELECT 
+			COUNT(A.GROUP_SQ)
+		FROM
+			MST_GROUP_TD A 
+		JOIN 
+			MST_ADMIN_TD B
+		ON
+			A.GROUP_SQ = B.GROUP_SQ
+		JOIN  
+			DET_ADMIN_TD C
+		ON
+			B.INDEX_SQ = C.INDEX_SQ
+		<where>
+			A.USE_FL = 'Y'
+			<if test="searchKeyword != ''">
+				<choose>
+					<when test="searchKey != ''">
+						AND A.GROUP_SQ = #{searchKey}
+					</when>
+				</choose>
+						
+				AND LOWER(B.NAME_NM) LIKE LOWER('%' + #{searchKeyword} + '%')
+			</if>
+		</where>		
+	</select>
+	
+	<!-- 지부관리자 계정관리 -->
+	<select id="mgrAccountSel" parameterType="accountVO" resultType="accountVO">
+		<include refid="pagingTop" />
+		
+		SELECT 
+			B.INDEX_SQ,A.GROUP_NM AS VAL1 ,B.NAME_NM AS VAL2,B.REG_DT AS VAL3,C.HOMEPAGE_URL AS VAL4  
+			,<include refid="rowNumber" /> 
+		FROM
+			MST_GROUP_TD A 
+		JOIN 
+			MST_ADMIN_TD B
+		ON
+			A.GROUP_SQ = B.GROUP_SQ
+		JOIN  
+			DET_ADMIN_TD C
+		ON
+			B.INDEX_SQ = C.INDEX_SQ
+		<where>
+			A.USE_FL = 'Y'
+			<if test="searchKeyword != ''">
+				<choose>
+					<when test="searchKey != ''">
+						AND A.GROUP_SQ = #{searchKey}
+					</when>
+				</choose>  
+						
+				AND LOWER(B.NAME_NM) LIKE LOWER('%' + #{searchKeyword} + '%')
+			</if>
+		</where>			
+		<include refid="pagingBtm" />
+	</select>
+	
+	<!-- 지부 담당자 상세정보 -->
+	<select id="mgrAccountInfo" parameterType="accountVO" resultType="hashMap">
+		SELECT 
+			*  
+		FROM
+			MST_GROUP_TD A 
+		JOIN 
+			MST_ADMIN_TD B
+		ON
+			A.GROUP_SQ = B.GROUP_SQ
+		JOIN  
+			DET_ADMIN_TD C
+		ON
+			B.INDEX_SQ = C.INDEX_SQ
+		LEFT JOIN
+			MST_FILEUPLOAD_TD D
+		ON   
+			B.INDEX_SQ = D.INDEX_SQ
+		<where>
+			B.INDEX_SQ = #{index_sq,jdbcType=INTEGER}    
+		</where>
+	</select>
+	
+	<!-- 지부관리자 Upsert -->
+	<select id="mgrAccountUpsert" parameterType="accountVO" resultType="hashMap">
+		MERGE
+			MST_ADMIN_TD AS T
+		USING 
+			(SELECT #{index_sq}, #{branch_nm},'B', 'Y', getdate(), #{user_id}, #{user_pwd}, #{group_sq}) AS S
+			(INDEX_SQ, NAME_NM, ADMIN_GB, USE_FL, REG_DT, USER_ID, USER_PWD, GROUP_SQ)
+		ON 
+			T.INDEX_SQ = S.INDEX_SQ
+		WHEN MATCHED THEN 
+			UPDATE	SET 
+				ADMIN_GB = S.ADMIN_GB,
+				USE_FL = S.USE_FL,
+				REG_DT = S.REG_DT,
+				USER_ID = S.USER_ID,
+				USER_PWD = S.USER_PWD,
+				GROUP_SQ = S.GROUP_SQ
+		WHEN  NOT MATCHED BY TARGET THEN
+			INSERT 
+				(NAME_NM, ADMIN_GB, USE_FL, REG_DT, USER_ID, USER_PWD, GROUP_SQ)
+			VALUES
+				(S.NAME_NM, S.ADMIN_GB, S.USE_FL, S.REG_DT, S.USER_ID, S.USER_PWD, S.GROUP_SQ)
+		OUTPUT $action as ACTION , INSERTED.*,DELETED.*;
+	</select>
+	
+	<!-- 지부관리자 상세 정보 upsert -->
+	<select id="mgrAccountInfoUpsert" parameterType="detAdminTdVO" resultType="hashMap">
+		MERGE
+			DET_ADMIN_TD AS T
+		USING
+			(SELECT #{branch_nm}, #{homepage_url}, #{damdang_nm}, #{addr1_nm}, #{addr2_nm}, #{post_nm}, #{lat_nm}, #{lon_nm}, #{phone1_nm}, #{phone2_nm}, #{phone3_nm}, #{fax1_nm}, #{fax2_nm}, #{fax3_nm}, #{email_nm}, getdate(), #{mst_sq}, #{index_sq}, #{traffic_nm}) AS S
+			(BRANCH_NM, HOMEPAGE_URL, DAMDANG_NM, ADDR1_NM, ADDR2_NM, POST_NM, LAT_NM, LON_NM, PHONE1_NM, PHONE2_NM, PHONE3_NM, FAX1_NM, FAX2_NM, FAX3_NM, EMAIL_NM, REG_DT, MST_SQ, INDEX_SQ, TRAFFIC_NM)
+		ON 
+			T.INDEX_SQ = S.INDEX_SQ
+		WHEN MATCHED THEN
+			UPDATE 
+				SET
+					HOMEPAGE_URL = S.HOMEPAGE_URL,
+					DAMDANG_NM = S.DAMDANG_NM,
+					ADDR1_NM = S.ADDR1_NM,
+					ADDR2_NM = S.ADDR2_NM,
+					POST_NM = S.POST_NM,
+					LAT_NM = S.LAT_NM,
+					LON_NM = S.LON_NM,
+					PHONE1_NM = S.PHONE1_NM,
+					PHONE2_NM = S.PHONE2_NM,
+					PHONE3_NM = S.PHONE3_NM,
+					FAX1_NM = S.FAX1_NM,
+					FAX2_NM = S.FAX2_NM,
+					FAX3_NM = S.FAX3_NM,
+					EMAIL_NM = S.EMAIL_NM,
+					INDEX_SQ = S.INDEX_SQ,
+					TRAFFIC_NM = S.TRAFFIC_NM
+		WHEN NOT MATCHED THEN
+			INSERT
+				 (BRANCH_NM, HOMEPAGE_URL, DAMDANG_NM, ADDR1_NM, ADDR2_NM, POST_NM, LAT_NM, LON_NM, PHONE1_NM, PHONE2_NM, PHONE3_NM, FAX1_NM, FAX2_NM, FAX3_NM, EMAIL_NM, REG_DT, INDEX_SQ, TRAFFIC_NM)
+			VALUES
+				(S.BRANCH_NM, S.HOMEPAGE_URL, S.DAMDANG_NM, S.ADDR1_NM, S.ADDR2_NM, S.POST_NM, S.LAT_NM, S.LON_NM, S.PHONE1_NM, S.PHONE2_NM, S.PHONE3_NM, S.FAX1_NM, S.FAX2_NM, S.FAX3_NM, S.EMAIL_NM, S.REG_DT, S.INDEX_SQ, S.TRAFFIC_NM)
+		OUTPUT $action as ACTION , INSERTED.*,DELETED.*;
+	</select>
+	
+	<!-- 지부관리자 삭제 -->
+	<delete id="mgrAccountDel" parameterType="accountVO">
+		DELETE FROM MST_ADMIN_TD
+		<where>
+			INDEX_SQ = #{index_sq,jdbcType=INTEGER}
+		</where>
+	</delete>
+	
+	<!-- 지부관리자 상세 삭제 -->
+	<delete id="mgrAccountInfoDel" parameterType="detAdminTdVO">
+		DELETE FROM DET_ADMIN_TD
+		<where>
+			INDEX_SQ = #{index_sq,jdbcType=INTEGER}
+		</where>
+	</delete>
+	
+	<!-- 지부 항목체크(중복확인) -->
+	<select id="mgrBranchCheckCnt" parameterType="hashMap" resultType="Int"  statementType="PREPARED">
+		SELECT
+			COUNT(INDEX_SQ)
+		FROM 
+			MST_ADMIN_TD
+		<where>
+			<if test="branch_nm != null">
+				NAME_NM = '${branch_nm}'		
+			</if>
+		</where>
+	</select> 
+
+	<!-- 배너 리스트 -->
+	<select id="mgrBannerSel" parameterType="mstBannerTdVO" resultType="mstBannerTdVO"> 
+		<include refid="pagingTop" />
+		
+		SELECT 
+			A.BANNER_SQ, A.BANNER_NM, A.BANNER_URL, A.START_DT, A.USE_FL, A.REG_DT, A.END_DT, A.GROUP_SQ, A.KIND_FL, A.USER_ID, A.ORDERBY_CNT,
+			B.FAD_SQ, B.FNAME_NM, B.FSIZE_NM, B.FEXT_NM, B.CHNAME_NM, B.INDEX_SQ, B.TABLE_NM  
+			,<include refid="rowNumber" /> 
+		FROM
+			MST_BANNER_TD A 
+		LEFT JOIN 
+			MST_FILEUPLOAD_TD B
+		ON A.BANNER_SQ = B.INDEX_SQ
+		<where>
+			B.TABLE_NM = 'BANNER' 
+			AND
+			A.KIND_FL = #{kind_fl}    
+		</where>			
+		<include refid="pagingBtm" />
+	</select>
+	
+	<!-- 배너 등록/수정 -->
+	<select id="mgrBannerUpsert" parameterType="mstBannerTdVO" resultType="hashMap">
+		MERGE
+			mst_banner_td AS T
+		USING 
+			(SELECT #{banner_sq}, #{banner_nm}, #{banner_url}, #{start_dt}, #{use_fl}, getdate(), #{end_dt}, #{group_sq}, #{kind_fl}, #{user_id}, #{orderby_cnt}) AS S
+			(BANNER_SQ, BANNER_NM, BANNER_URL, START_DT, USE_FL, REG_DT, END_DT, GROUP_SQ, KIND_FL, USER_ID, ORDERBY_CNT)
+		ON 
+			T.BANNER_SQ = S.BANNER_SQ
+		WHEN MATCHED THEN 
+			UPDATE	SET 
+				BANNER_NM = S.BANNER_NM,
+				BANNER_URL = S.BANNER_URL,
+				START_DT = S.START_DT,
+				USE_FL = S.USE_FL,
+				END_DT = S.END_DT,
+				GROUP_SQ = S.GROUP_SQ,
+				KIND_FL = S.KIND_FL,
+				USER_ID = S.USER_ID,
+				ORDERBY_CNT = S.ORDERBY_CNT
+		WHEN  NOT MATCHED BY TARGET THEN  
+			INSERT 
+				(BANNER_NM, BANNER_URL, START_DT, USE_FL, REG_DT, END_DT, GROUP_SQ, KIND_FL, USER_ID, ORDERBY_CNT)
+			VALUES
+				(S.BANNER_NM, S.BANNER_URL, S.START_DT, S.USE_FL, S.REG_DT, S.END_DT, S.GROUP_SQ, S.KIND_FL, S.USER_ID, S.ORDERBY_CNT)
+		OUTPUT $action as ACTION , INSERTED.*,DELETED.*;
+	</select>
+	
+	<!-- 배너상세정보 -->
+	<select id="mgrBannerInfo" parameterType="mstBannerTdVO" resultType="hashMap">
+		SELECT * 
+		FROM 
+			MST_BANNER_TD A
+		LEFT JOIN
+			MST_FILEUPLOAD_TD B
+		ON   
+			A.BANNER_SQ = B.INDEX_SQ
+		<where>
+			BANNER_SQ = #{banner_sq}  
+		</where>
+	</select>
+	
+	<!-- 배너 삭제 -->
+	<delete id="mgrBannerDel" parameterType="mstBannerTdVO">
+	
+	</delete>
+</mapper>

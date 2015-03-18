@@ -1,0 +1,54 @@
+@CHARSET "UTF-8";
+/* [그룹구분] 시도본부 / 복지관 / 해외지부 */
+
+.bigBannerArea {position: relative;border: 1px solid #ddd;}
+.bigBannerArea .bx-pager {position: absolute;left: 16px;top: 14px;line-height: 0;}
+.bigBannerArea .bx-pager div {float: left;margin-right: 9px;}
+.bigBannerArea .bx-pager div a {display: inline-block;width: 13px;height: 13px;font-size: 0;line-height: 0;text-indent:-9999px;background:url(/images/front/main/banner_pagingOff.png) 0 0 no-repeat;}
+.bigBannerArea .bx-pager div a.active{background:url(/images/front/main/banner_pagingOn.png) 0 0 no-repeat;}
+.bigBannerArea .bx-controls-direction {position: absolute;top: 129px;height: 69px;overflow: hidden;width:998px;}
+.bigBannerArea .bx-controls-direction a {width: 44px;height: 69px;font-size: 0;line-height: 0;text-indent:-9999px;}
+.bigBannerArea .bx-prev {float: left;margin-left: 5px;background:url(/images/front/main/banner_prev01.png) 0 0 no-repeat;}
+.bigBannerArea .bx-next {float: right;margin-right: 5px;background:url(/images/front/main/banner_next01.png) 0 0 no-repeat;}
+
+.bannerArea {margin: 34px 0;}
+.bannerArea ul {overflow: hidden;}
+.bannerArea li {float: left;overflow: hidden;padding: 0 7px;}
+.bannerArea li.first {padding: 0 6px 0 0;}
+.bannerArea li.last {padding: 0 0 0 6px;}
+
+.boardWrap {overflow: hidden;margin-bottom: 66px;}
+.bbsBox {position: relative;width: 280px;}
+.bbsBox ul {margin-top: 19px;}
+.boardWrap .fl {width: 617px;}
+.boardWrap .fl .branchBoard {overflow: hidden;margin-bottom: 70px;}
+.boardWrap .fl .branchBoard .branchBox1 {float: left;}
+.boardWrap .fl .branchBoard .branchBox2 {float: right;}
+.boardWrap .fl .gniBoard {overflow: hidden;}
+.boardWrap .fl .gniBoard .newsBox {float: left;}
+.boardWrap .fl .gniBoard .storyBox {float: right;}
+.boardWrap .fl .gniBoard .storyBox li {position: relative;width: 50%;float: left;}
+.boardWrap .fl .gniBoard .storyBox li a {display: inline-block;border: 1px solid #ddd;}
+.boardWrap .fl .gniBoard .storyBox li img {display: block;width: 132px;height: 105px;}
+.boardWrap .fl .gniBoard .storyBox li.last {text-align: right;}
+.boardWrap .fl .gniBoard .storyBox li.last a .movCover {position: absolute;right: 1px;top: 1px;}
+
+ul.styleList li {font-size: 12px;}
+
+.boardWrap .fr {width: 297px;padding: 17px 17px 16px 16px;background-color: #89a130;}
+.boardWrap .fr ul.styleThumnail {margin-bottom:32px;}
+.boardWrap .fr ul.styleThumnail li {overflow: hidden;}
+.boardWrap .fr ul.styleThumnail img {float: left;display: inline-block;width: 132px;height: 105px;border: 1px solid #d4d4d4;}
+.boardWrap .fr .webzine {margin: 0 auto;width: 280px;height: 75px;border-top: 1px solid #e9edd8;background:url(/images/front/main/bg_webzineA.png) 32px 6px no-repeat;}
+.boardWrap .fr .webzine a {display: block;}
+.boardWrap .fr .webzine a p {margin: 10px 0 0 108px;height: 30px;line-height: 27px;font-size: 14px;color: #fff;font-weight: bold;letter-spacing: -1px;}
+.boardWrap .fr .webzine a span {margin: 0 0 0 106px;display: inline-block;width: 120px;height: 24px;text-align: center;line-height: 21px;color: #fff;font-weight: bold;font-size: 12px;letter-spacing: -1px;}
+.boardWrap .fr .support {padding-top: 4px;border-top: 1px solid #dce3c1;background:url(/images/front/main/bg_supportA.png) 0 bottom no-repeat;}
+.boardWrap .fr .support p {padding-left: 2px;height: 33px;}
+.boardWrap .fr .support ul {overflow: hidden;margin: 0 6px;}
+.boardWrap .fr .support ul li {float: left;width: 25%;height: 63px;}
+.boardWrap .fr .support ul li.item01 {background:url(/images/front/main/bg_supportA01.gif) center 9px no-repeat;}
+.boardWrap .fr .support ul li.item02 {background:url(/images/front/main/bg_supportA02.gif) center 9px no-repeat;}
+.boardWrap .fr .support ul li.item03 {background:url(/images/front/main/bg_supportA03.gif) center 9px no-repeat;}
+.boardWrap .fr .support ul li.item04 {background:url(/images/front/main/bg_supportA04.gif) center 9px no-repeat;}
+.boardWrap .fr .support a {display:block;text-align: center;color: #626262;font-size: 11px;line-height: 30px;padding-top: 33px;}

@@ -1,0 +1,52 @@
+@CHARSET "UTF-8";
+
+#header .link {position: absolute;display: inline-block;bottom: 18px;padding-left: 23px;color: #488da7;font-size: 12px;}
+#header .linkedu {right: 107px;background:url(/images/front/common/ico_edu2.gif) 0 50% no-repeat;}
+#header .linkqna {right: 0;background:url(/images/front/common/ico_qna.gif) 0 50% no-repeat;}
+
+.nav {overflow: hidden;background-color: #00a7e5;}
+.nav ul {width: 1000px;margin: 0 auto;overflow: hidden;}
+.nav li {float: left;}
+.nav li.first {margin-left: 47px;}
+.nav li a {display: block;padding: 0 34px;height: 50px;color: #FFF;font-size: 18px;font-weight: bold;line-height: 44px;}
+
+.contents_wrap {overflow: hidden;margin: 1px 0;border-left: 3px solid #02a7e3;}
+.frontLnb {float: left;width: 200px;}
+.frontLnb h2 a {display: block;padding: 30px 20px;color: #02a7e3;font-size: 20px;font-weight: bold;letter-spacing: -2px;}
+.frontLnb .depth2 a.depths2link {display: block;padding: 0 20px;height: 38px;color: #535353;font-size: 16px;font-weight: bold;line-height: 36px;background: url(/images/front/common/bul_menuone2.gif) 0 50% no-repeat;}
+.frontLnb .depth2 a:hover,.frontLnb .depth2 a:focus {text-decoration:none;}
+.frontLnb .depth2 .depths3box {display: none;}
+.frontLnb .depth2 .depths3box.on {display: block;}
+.frontLnb .depth3 {padding:0 22px;background-color: #f1f1f1;background:#f1f1f1 url(/images/front/common/bg_lnb.png) left 50% repeat-y;}
+.frontLnb .depth3.first {padding-top: 8px;background: url(/images/front/common/bg_lnb.png) left top no-repeat;}
+.frontLnb .depth3.last {padding-bottom: 8px;background: url(/images/front/common/bg_lnb.png) left bottom no-repeat;}
+.frontLnb .depth3 a {color: #838383;font-size: 14px;font-weight: bold;line-height: 25px;}
+.frontLnb .depth3.active a {color: #02a7e3;}
+.contentsBox .subdiscription {color: #02a7e3;}
+
+a.btn_indetail {background-color: #829c2c;}
+
+/* main */
+.bbsBox .btn_more {position: absolute;width: 17px;height: 17px;top: 9px;right: 0;font-size: 0;line-height: 0;text-indent: -999px;background:url(/images/front/main/bg_btnMore.png) 0 0 no-repeat;}
+.branchBoard .bbsBox .btn_more {background-color: #488da7;}
+.gniBoard .bbsBox .btn_more {background-color: #488da7;}
+.fl .branchBoard .bbsBox .bbsTitle {color: #488da7;border-bottom: 1px solid #cbcbcb;}
+.fl .gniBoard .bbsBox .bbsTitle {color: #488da7;border-bottom: 1px solid #cbcbcb;}
+.fr .bbsBox .bbsTitle {color: #FFF;border-bottom: 1px solid #91bbca;}
+.fr .bbsBox .btn_more {background:#fff url(/images/front/main/bg_btnMore3.png) 0 0 no-repeat;}
+.fr .bbsBox {margin: 0 auto;color: #fff;}
+ul.styleList {}
+ul.styleList li {overflow: hidden;color: #5d5d5d;height: 21px;line-height: 21px;}
+ul.styleList li a {float: left;display: block;}
+ul.styleList li span {float: right;display: block;}
+
+ul.styleThumnail li {overflow: hidden;}
+ul.styleThumnail li a {display: block;overflow: hidden;}
+ul.styleThumnail img {float: left;display: inline-block;width: 132px;height: 105px;border: 1px solid #ddd;}
+ul.styleThumnail p {margin-left: 150px;color: #fff;}
+ul.styleThumnail p.title {font-size: 13px;font-weight: bold;margin-bottom: 3px;}
+ul.styleThumnail p.summary {font-size: 12px;}
+
+ul.styleThumnail02 li a {display: block;}
+ul.styleThumnail02 img {display: block;border: 1px solid #d4d4d4;}
+ul.styleThumnail02 p.title {color: #5d5d5d;font-size: 12px;height: 35px;line-height: 30px;}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "egovframework.www.mgr.login.service.impl.MgrMapper">
+
+	<sql id="pagingTop">
+		;With Cust AS (
+	</sql>
+	
+	<sql id="rowNumber">
+		ROW_NUMBER() OVER (order by #{obfield} desc) as RowNumber
+	</sql>
+	
+	<sql id="pagingBtm">
+		)
+			select * from Cust Where RowNumber Between #{pageFirst} and #{pageLast} 
+	</sql>
+	
+	<!-- 관리자 로그인 처리 -->
+	<select id="mgrMemInfo" parameterType="adminVO" resultType="adminVO">
+		SELECT NAME_NM, ADMIN_GB, USE_FL, USER_ID, GROUP_SQ FROM MST_ADMIN_TD
+		<where>
+			USE_FL = 'Y'
+			<if test="user_id != null">
+				and user_id  = #{user_id}
+			</if>
+			<if test="user_pwd != null">
+				and user_pwd = #{user_pwd}
+			</if>
+		</where>
+	</select>
+</mapper>

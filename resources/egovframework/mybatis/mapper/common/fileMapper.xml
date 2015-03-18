@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "egovframework.common.service.impl.FileSupportMapper">
+	<!-- 
+		MERGE [INTO] <target table>
+		USING <source table or table expression>
+		ON <join/merge predicate> (semantics similar to outer join)
+		WHEN MATCHED <statement to run when match found in target>
+		WHEN [TARGET] NOT MATCHED <statement to run when no match found in target> 
+	-->
+	
+	<resultMap type="egovframework.common.service.FileVO" id="fileDetail">
+		<result property="fad_sq" column = "FAD_SQ"/>
+		<result property="fname_nm" column = "FNAME_NM"/>
+		<result property="fsize_nm" column = "FSIZE_NM"/>
+		<result property="fext_nm" column = "FEXT_NM"/>
+		<result property="chname_nm" column = "CHNAME_NM"/>
+		<result property="index_sq" column = "INDEX_SQ"/>
+	</resultMap>
+	
+	<!-- 파일list -->
+	<select id="fileInfo" parameterType="fileVO" resultMap="fileDetail">
+		SELECT 
+			FAD_SQ, FNAME_NM, FSIZE_NM, FEXT_NM, CHNAME_NM, INDEX_SQ 
+		FROM 
+			MST_FILEUPLOAD_TD
+		<where>
+			INDEX_SQ = #{index_sq}
+			AND
+				TABLE_NM = #{table_nm}
+		</where>
+	</select>
+	
+	<!-- 파일 upsert -->
+	<select id="fileUpsert" parameterType="fileVO" resultType="hashMap">
+		MERGE
+			MST_FILEUPLOAD_TD AS T
+		USING 
+			(SELECT #{fad_sq},#{fname_nm}, #{fsize_nm}, #{fext_nm}, #{chname_nm},#{table_nm}, #{index_sq}) AS S
+			(FAD_SQ,FNAME_NM, FSIZE_NM, FEXT_NM, CHNAME_NM,TABLE_NM, INDEX_SQ)
+		ON 
+			T.INDEX_SQ = S.INDEX_SQ
+		WHEN MATCHED THEN   
+			UPDATE	SET 
+				FNAME_NM =S.FNAME_NM,
+				FSIZE_NM =S.FSIZE_NM,
+				FEXT_NM =S.FEXT_NM,
+				CHNAME_NM =S.CHNAME_NM,
+				TABLE_NM = S.TABLE_NM
+		WHEN  NOT MATCHED BY TARGET THEN
+			INSERT 
+				(FNAME_NM, FSIZE_NM, FEXT_NM, CHNAME_NM, INDEX_SQ,TABLE_NM)
+			VALUES
+				(S.FNAME_NM, S.FSIZE_NM, S.FEXT_NM, S.CHNAME_NM, S.INDEX_SQ,S.TABLE_NM)
+		OUTPUT $action as ACTION , INSERTED.*,DELETED.*;
+	</select>
+	
+	<!-- 파일삭제 -->
+	<delete id="fileDel" parameterType="fileVO">
+		DELETE FROM 
+			MST_FILEUPLOAD_TD
+		<where>
+			INDEX_SQ = #{index_sq}
+		</where>
+	</delete>
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <typeAliases>
+    	<!-- egovVO -->
+		<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+		
+		<!-- CommonVO -->
+		<typeAlias alias="fileVO" type="egovframework.common.service.FileVO"/>
+		
+		<!-- WorkVO -->
+		<typeAlias alias="adminVO" type="egovframework.www.mgr.login.service.AdminVO"/>
+		<typeAlias alias="groupVO" type="egovframework.www.mgr.master.service.MstGroupTdVO"/>
+		<typeAlias alias="accountVO" type="egovframework.www.mgr.master.service.MstAdminTdVO"/>
+		<typeAlias alias="detAdminTdVO" type="egovframework.www.mgr.master.service.DetAdminTdVO"/>
+		<typeAlias alias="mstBannerTdVO" type="egovframework.www.mgr.master.service.MstBannerTdVO"/>
+		
+		
+    </typeAliases>
+</configuration>

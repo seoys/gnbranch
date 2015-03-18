@@ -1,0 +1,34 @@
+@CHARSET "UTF-8";
+/* [그룹구분] 좋은마음센터 */
+.mainWrap {position: relative;height: 540px;overflow: hidden;margin-bottom: 53px;}
+.leftArea {width: 210px;margin-right: 28px;}
+.bbsBox {position: relative;width: 210px;}
+.leftArea .link01 {position: absolute;display: block;bottom: 0;left: 0;}
+
+.bbsBox {margin-bottom: 3px;}
+.bbsBox ul {margin-top: 8px;}
+ul.styleList li {font-size: 11px;}
+
+.centerArea {float: left;width: 510px;}
+.bigBannerArea {position: relative;border: 1px solid #ddd;}
+.bigBannerArea .bx-controls {position: absolute;overflow: hidden;height: 39px;width: 100%;  bottom: 7px;  left: 0;}
+.bigBannerArea .bx-pager {position: absolute;  left: 50%;  bottom: 12px;  line-height: 0;  }
+.bigBannerArea .bx-pager div {float: left;margin: 0 5px;}
+.bigBannerArea .bx-pager div a {display: inline-block;width: 13px;height: 13px;font-size: 0;line-height: 0;text-indent:-9999px;background:url(/images/front/main/banner_pagingOff.png) 0 0 no-repeat;}
+.bigBannerArea .bx-pager div a.active{background:url(/images/front/main/banner_pagingOn.png) 0 0 no-repeat;}
+.bigBannerArea .bx-controls-direction {}
+.bigBannerArea .bx-controls-direction a {width: 26px;height: 39px;font-size: 0;line-height: 0;text-indent:-9999px;}
+.bigBannerArea .bx-prev {position: absolute;  top: 0;  left: 50%;background:url(/images/front/main/banner_prev03.png) 0 0 no-repeat;}
+.bigBannerArea .bx-next {position: absolute;  top: 0;  right: 50%;background:url(/images/front/main/banner_next03.png) 0 0 no-repeat;}
+.bannerArea ul {overflow: hidden;}
+.bannerArea li {float: left;overflow: hidden;}
+.bannerArea li a {display: block;}
+
+.rightArea {padding: 18px 21px 0;height: 522px;width: 210px;background-color: #89a130;}
+.rightArea ul.styleThumnail02 p.title {color: #fff;}
+.rightArea .bbsBox {margin-bottom: 17px;}
+.rightArea .centerInfo {padding: 8px 0 0 60px;border-top: 1px solid #b8c783;background:url(/images/front/main/typeB_bg_phone.png) 2px 14px no-repeat;}
+.rightArea .centerInfo p.tel {font-size: 18px;font-weight: bold;color: #fff;}
+.rightArea .centerInfo .block {margin: 6px 0;}
+.rightArea .centerInfo p.text {font-size: 11px;color: #405200;letter-spacing: -1px;}
+.btn_online {position: absolute;right: 0;bottom: 0;display: block;}

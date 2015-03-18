@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/"
+    debug="false">
+ 
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ABSOLUTE} %5p %50.50c:%4L - %m%n" />
+        </layout>
+    </appender>
+ 
+    <appender name="file" class="org.apache.log4j.RollingFileAppender">
+        <param name="file" value="c:/log/log.log" />
+        <param name="Append" value="true" />
+        <param name="MaxFileSize" value="10240KB" />
+        <param name="MaxBackupIndex" value="100" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ABSOLUTE} %5p %50.50c:%4L - %m%n" />
+        </layout>
+    </appender>
+ 
+    <!-- log SQL with timing information, post execution -->
+    <logger name="jdbc.sqlonly" additivity="false">
+        <level value="OFF" />
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </logger>
+ 
+    <logger name="jdbc.sqltiming" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </logger>
+    <logger name="jdbc.audit" additivity="false">
+        <level value="ERROR" />
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </logger>
+    <logger name="jdbc.resultset" additivity="false">
+        <level value="ERROR" />
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </logger>
+ 
+    <logger name="org.springframework" additivity="false">
+        <level value="DEBUG" />
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </logger>
+ 
+    <logger name="org.springframework.jdbc" additivity="false">
+        <level value="DEBUG" />
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </logger>
+ 
+    <root>
+        <level value="DEBUG" />
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </root>
+ 
+</log4j:configuration>
