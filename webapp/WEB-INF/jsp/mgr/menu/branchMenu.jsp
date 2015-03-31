@@ -20,7 +20,7 @@
 							
 							<!-- 카테고리 트리 -->
 							<div class="category_list">
-								<ol id="id_cateTree">
+								<ol>
 									<!-- <li class="one"> -->
 										<!-- label 클릭시 class="active" 추가 : 서브메뉴 동일 -->
 										<!-- <label class="active">1Depths메뉴명</label>
@@ -56,7 +56,7 @@
 								<!-- 메뉴입력 -->
 								<div class="menu_name">
 									<p class="tit">카테고리명 입력</p>
-									<div class="con"><input type="text" title="메뉴명 입력필드" class="form-control"/> <button class="btn btn-default">저장</button></div>
+									<div class="con"><input type="text" ng-model="catename" title="메뉴명 입력필드" class="form-control"/> <button class="btn btn-default" ng-click="cateAdd()">저장</button></div>
 								</div>
 								<!-- 페이지연결 -->
 								<div class="menu_page">
@@ -136,6 +136,11 @@
 				</div>
 			</div>
 			<!-- pageContents -->
+			<div ng-contorller="SomeController">
+				<expander class="expander" expander-titles="{{title}}">
+				{{text}}
+				</expander>
+			</div>
 		</div>
 		<!-- //contentsWrapper -->
 	</div>
@@ -152,17 +157,36 @@
 		});
 	</script>
 	<script type="text/javascript">
-	angular.module('menuApp', {
-	  setup: function() {
-	    // setup for menuApp.controll
-	  },
-	  teardown: function() {
-	    //teardown for menuApp
-	  }
-	}).controller('menuController', ['$scope', function($scope){
+	var menuApp = angular.module("menuApp",[]);
+	menuApp.directive('expander', ['', function(){
+		// Runs during compile
+		return {
+			// name: '',
+			// priority: 1,
+			// terminal: true,
+			 scope: {title='=expanderTitle'}, // {} = isolate, true = child, false/undefined = no change
+			// controller: function($scope, $element, $attrs, $transclude) {},
+			// require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
+			 restrict: 'EA', // E = Element, A = Attribute, C = Class, M = Comment
+			 template: '<div>{{title}}</div><div>title ng-click="toggle()">{{title}}</div>',
+			// templateUrl: '',
+			 replace: true,
+			 transclude: true,
+			// compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
+			link: function($scope, iElm, iAttrs, controller) {
+				$scope.showMe = false;
+				$scope.toggle = function toggle(){
+					scope.showMe = !scope.showMe;
+				}
+			}
+		};
+	}]);
+	menuApp.controller('menuController', ['$scope', function($scope){
 		
-	}])
-	
+	}]);
+	menuApp.controller('SomeController', ['$scope', function($scope){
+		
+	}]);
 	</script>
 	
 </body>
