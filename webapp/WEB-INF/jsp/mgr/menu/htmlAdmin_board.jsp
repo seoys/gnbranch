@@ -3,7 +3,7 @@
 			<!-- pageContents -->
 			<div id="page-wrapper">
 				<!-- pageTitle -->
-				<jsp:include page="/mgr/include/inc_pageTitle.jsp" flush="false" />
+				<%@ include file="/mgr/include/inc_pageTitle.jsp" %>
 
 				<div class="contents">
 					<!-- admin page contents start -->

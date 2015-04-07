@@ -8,6 +8,7 @@ import egovframework.www.mgr.master.service.DetAdminTdVO;
 import egovframework.www.mgr.master.service.MstAdminTdVO;
 import egovframework.www.mgr.master.service.MstBannerTdVO;
 import egovframework.www.mgr.master.service.MstGroupTdVO;
+import egovframework.www.mgr.master.service.MstMenucateTdVO;
 
 /**
  * @Class MgrMasterMapper.java
@@ -45,4 +46,12 @@ public interface MgrMasterMapper {
 	public List<MstBannerTdVO> mgrBannerSel(MstBannerTdVO mstBannerTdVO);
 	
 	public Map<String,Object> mgrBannerInfo(MstBannerTdVO mstBannerTdVO);
+	
+	public List<MstMenucateTdVO> mgrMenuCategoryList(MstMenucateTdVO menuVO);
+	
+	public void mgrMenuCategoryUpsert(MstMenucateTdVO menuVO);
+	
+	public void mgrMenuCategoryDel(MstMenucateTdVO menuVO);
+	
+	public int mgrMenuCateMaxNum(MstMenucateTdVO menuVO);
 }

@@ -270,7 +270,58 @@
 	</select>
 	
 	<!-- 배너 삭제 -->
-	<delete id="mgrBannerDel" parameterType="mstBannerTdVO">
+	<delete id="mgrBannerDel" parameterType="mstBannerTdVO"> 
 	
 	</delete>
+	
+	<!-- 메뉴카테고리 리스트 -->
+	<select id="mgrMenuCategoryList" parameterType="mstMenucateTdVO" resultType="mstMenucateTdVO">
+		SELECT CATE_SQ,CATE_CD,MENU_NM FROM MST_MENUCATE_TD
+		<where>
+			USE_FL = 'Y'
+			<if test="user_id !=null">
+				AND USER_ID = #{user_id}
+			</if>
+		</where>
+		ORDER BY CATE_CD ASC
+	</select>
+	
+	<!-- 메뉴카테고리 수정/등록 -->
+	<select id="mgrMenuCategoryUpsert" parameterType="mstMenucateTdVO" resultType="mstMenucateTdVO">
+		MERGE
+	    	MST_MENUCATE_TD AS T
+	    USING
+	        (SELECT #{cate_sq}, #{cate_cd}, #{menu_nm}, #{use_fl}, #{reg_dt}, #{user_id}, #{index_sq}) AS S
+	        (cate_sq, cate_cd, menu_nm, use_fl, reg_dt, user_id, index_sq)
+	    ON
+	      T.cate_sq = S.cate_sq
+	    WHEN MATCHED THEN
+	        UPDATE SET
+	            T.menu_nm = S.menu_nm,
+	            T.use_fl = S.use_fl,
+	            T.user_id = S.user_id,
+	            T.index_sq = S.index_sq  
+	    WHEN NOT MATCHED BY TARGET THEN
+	        INSERT
+	            (cate_cd, menu_nm, use_fl, reg_dt, user_id, index_sq)
+	        VALUES
+	            (S.cate_cd, S.menu_nm, S.use_fl, getdate(), S.user_id, S.index_sq)     
+	    OUTPUT $action as ACTION , INSERTED.*,DELETED.*;
+	</select>
+	
+	<!-- 메뉴카테고리 삭제 -->
+	<delete id="mgrMenuCategoryDel" parameterType="mstMenucateTdVO">
+		DELETE FROM MST_MENUCATE_TD
+		<where>
+			cate_cd = #{cate_cd}
+		</where>
+	</delete>
+	
+	<!-- 메뉴카테고리 지정된 max값 가져오기 -->
+	<select id="mgrMenuCateMaxNum" parameterType="mstMenucateTdVO" resultType="int">
+		SELECT MAX(CATE_CD) FROM MST_MENUCATE_TD
+		<where>
+		CATE_CD BETWEEN #{min_cate} AND #{max_cate}
+		</where>
+	</select>
 </mapper>

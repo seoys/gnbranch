@@ -6,8 +6,8 @@
         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
                 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
                 http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
-                
-     <mvc:resources mapping="/css/**" location="/css/"/>
+	
+	 <mvc:resources mapping="/css/**" location="/css/"/>
      <mvc:resources mapping="/js/**" location="/js/"/>
      <mvc:resources mapping="/images/**" location="/images/"/>
      
@@ -16,7 +16,9 @@
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
     </context:component-scan>
-
+    
+    <mvc:annotation-driven />
+    
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="webBindingInitializer">
             <bean class="egovframework.cmmn.web.EgovBindingInitializer"/>
@@ -51,6 +53,9 @@
         </property>
     </bean>
 	<!-- /For Pagination Tag -->
-
+	
     <mvc:view-controller path="/cmmn/validator.do" view-name="cmmn/validator"/>
+    
+    <bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+    
 </beans>

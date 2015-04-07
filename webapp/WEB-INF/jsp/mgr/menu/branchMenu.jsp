@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 	<%@ include file="/mgr/include/inc_header.jsp" %>
+	<link rel="stylesheet" type="text/css" href="/js/bower_components/jstree/dist/themes/default/style.min.css" />
 			<!-- pageContents -->
-			<div id="page-wrapper" ng-app="menuApp">
+			<div id="page-wrapper">
 				<!-- pageTitle -->
 				<%@ include file="/mgr/include/inc_pageTitle.jsp" %>
 
-				<div class="contents" ng-controller="menuController">
+				<div class="contents">
 					<!-- admin page contents start -->
 					<h3>사이트 카테고리 관리 · 설정</h3>
 					<div class="menusetBox">
@@ -13,38 +14,13 @@
 						<div class="fl">
 							<!-- button -->
 							<div class="btnarea">
-								<button class="btn2 add"><span></span>카테고리 추가</button>
-								<button class="btn2 delete"><span></span>삭제</button>
+								<!-- <button class="btn2 add"><span></span>카테고리 추가</button> -->
+								<button class="btn2 delete" id="btn_catedel"><span></span>삭제</button>
 							</div>
 							<!-- //button -->
 							
 							<!-- 카테고리 트리 -->
-							<div class="category_list">
-								<ol>
-									<!-- <li class="one"> -->
-										<!-- label 클릭시 class="active" 추가 : 서브메뉴 동일 -->
-										<!-- <label class="active">1Depths메뉴명</label>
-										<ol>
-											<li class="two">
-												<label>2Depths메뉴명</label>
-												<ol>
-													<li class="two"><label>3Depths메뉴명</label><div class="btnbox"><button class="btn_up">메뉴위로 이동</button><button class="btn_down">메뉴아래로 이동</button></div></li>
-												</ol>
-												<div class="btnbox"><button class="btn_up">메뉴위로 이동</button><button class="btn_down">메뉴아래로 이동</button></div>
-											</li>
-											<li class="two"><label>2Depths메뉴명</label><div class="btnbox"><button class="btn_up">메뉴위로 이동</button><button class="btn_down">메뉴아래로 이동</button></div></li>
-										</ol>
-										<div class="btnbox"><button class="btn_up">메뉴위로 이동</button><button class="btn_down">메뉴아래로 이동</button></div> -->
-									<!-- </li> -->
-									<!-- <li class="one">
-										<label>1Depths메뉴명</label>
-										<ol>
-											<li class="two"><label>2Depths메뉴명</label><div class="btnbox"><button class="btn_up">메뉴위로 이동</button><button class="btn_down">메뉴아래로 이동</button></div></li>
-										</ol>
-										<div class="btnbox"><button class="btn_up">메뉴위로 이동</button><button class="btn_down">메뉴아래로 이동</button></div>
-									</li> -->
-								</ol>
-							</div>
+							<div class="category_list" id="catelist"></div>
 							<!-- //카테고리 트리 -->
 						</div>
 						<!-- //카테고리 리스트 -->
@@ -53,11 +29,16 @@
 						<div class="category_set fl">
 							<fieldset>
 								<legend>메뉴 설정</legend>
+								<form name="dfrm" id="dfrm" method="post" onSubmit="return false;">
 								<!-- 메뉴입력 -->
 								<div class="menu_name">
 									<p class="tit">카테고리명 입력</p>
-									<div class="con"><input type="text" ng-model="catename" title="메뉴명 입력필드" class="form-control"/> <button class="btn btn-default" ng-click="cateAdd()">저장</button></div>
+									<div class="con"><input type="text" name="menu_nm" id="txt_menunm" title="메뉴명 입력필드" class="form-control"/> <button class="btn btn-default" id="btn_submit">저장</button></div>
 								</div>
+								<input type="hidden" name="use_fl" value="Y"/>
+								<input type="hidden" name="cate_cd" id="hid_catecd"/>
+								<input type="hidden" name="sel_cate" id="hid_selcate"/>
+								</form>
 								<!-- 페이지연결 -->
 								<div class="menu_page">
 									<p class="tit">메뉴연결 페이지 선택</p>
@@ -136,17 +117,12 @@
 				</div>
 			</div>
 			<!-- pageContents -->
-			<div ng-contorller="SomeController">
-				<expander class="expander" expander-titles="{{title}}">
-				{{text}}
-				</expander>
-			</div>
 		</div>
 		<!-- //contentsWrapper -->
 	</div>
-	
 	<%@ include file="/mgr/include/inc_footer.jsp" %>
-	<script type="text/javascript" src="/js/bower_components/angular/angular.min.js"></script>
+	
+	<script type="text/javascript" src="/js/bower_components/jstree/dist/jstree.min.js"></script>
 	<script type="text/javascript">
 		$(function() {
 			// 메뉴연결 페이지 선택 라디오버튼
@@ -155,40 +131,69 @@
 				$(this).parent().addClass('on');
 			});
 		});
-	</script>
-	<script type="text/javascript">
-	var menuApp = angular.module("menuApp",[]);
-	menuApp.directive('expander', ['', function(){
-		// Runs during compile
-		return {
-			// name: '',
-			// priority: 1,
-			// terminal: true,
-			 scope: {title='=expanderTitle'}, // {} = isolate, true = child, false/undefined = no change
-			// controller: function($scope, $element, $attrs, $transclude) {},
-			// require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
-			 restrict: 'EA', // E = Element, A = Attribute, C = Class, M = Comment
-			 template: '<div>{{title}}</div><div>title ng-click="toggle()">{{title}}</div>',
-			// templateUrl: '',
-			 replace: true,
-			 transclude: true,
-			// compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
-			link: function($scope, iElm, iAttrs, controller) {
-				$scope.showMe = false;
-				$scope.toggle = function toggle(){
-					scope.showMe = !scope.showMe;
+		
+		$(document).ready(function(){
+			jsonData();
+			
+			// submit..
+			$("#btn_submit").click(function(){
+				var send = "/mgr/menuCategoryProc.gn";
+				var $txt_menunm = $("#txt_menunm").val();
+				var pars = $("#dfrm").serialize();
+				
+				if($.trim($txt_menunm) != ""){
+					$.post(send,pars,function(xdata){
+						$("#txt_menunm").val('');
+						jsonData();
+					});	
+				}else{
+					custom.cus_alert("메뉴명을 입력하세요.","Message");
 				}
-			}
+				
+				
+			});
+			
+			$("#btn_catedel").on("click",function(){
+				var $sel_value = $("#hid_selcate").val();
+				
+				if($.trim($sel_value) == ""){
+					custom.cus_alert("삭제할 메뉴를 선택하세요.","Message");
+				}else{
+					custom.cus_confirm("메뉴를 삭제하시겠습니까?<br/>삭제된 메뉴는 복원되지 않습니다.","Message","move","/mgr/menuCategoryDel.gn?cate_cd=" + $sel_value);
+				}
+			});
+		});
+		
+		
+		var jsonData = function(){
+			var send = "/mgr/menuList.gn";
+			var pars = "";
+			
+			$.getJSON(send,pars,function(xdata){
+				var sdata =  [];
+				var lastcatdcd = 0;
+				$.each(xdata,function(i,v){
+					sdata.push({"id":v.cate_cd,"parent":"#","text":v.menu_nm});
+					lastcatdcd = v.cate_cd;
+				});
+				
+				var lastcatdcd = parseInt(lastcatdcd) + 1000000;
+				$("#hid_catecd").val(lastcatdcd);
+				
+				createJSTrees(sdata);
+			});
 		};
-	}]);
-	menuApp.controller('menuController', ['$scope', function($scope){
 		
-	}]);
-	menuApp.controller('SomeController', ['$scope', function($scope){
 		
-	}]);
+		/* tree make.. */
+		var createJSTrees = function(jsonData) {
+			$('.category_list').jstree({ 'core' : {'data' : jsonData} }).bind("select_node.jstree", function(event, data) {
+				/* node 선택값을 지정된 id에 저장 */
+				$("#hid_selcate").val(data.node.id);	
+			});
+			$('.category_list').jstree(true).redraw();
+		};
 	</script>
-	
 </body>
 </html>
 	

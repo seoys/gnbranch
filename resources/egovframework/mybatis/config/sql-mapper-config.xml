@@ -15,6 +15,7 @@
 		<typeAlias alias="accountVO" type="egovframework.www.mgr.master.service.MstAdminTdVO"/>
 		<typeAlias alias="detAdminTdVO" type="egovframework.www.mgr.master.service.DetAdminTdVO"/>
 		<typeAlias alias="mstBannerTdVO" type="egovframework.www.mgr.master.service.MstBannerTdVO"/>
+		<typeAlias alias="mstMenucateTdVO" type="egovframework.www.mgr.master.service.MstMenucateTdVO"/>
 		
 		
     </typeAliases>

@@ -35,6 +35,7 @@ import egovframework.www.mgr.master.service.MgrMasterService;
 import egovframework.www.mgr.master.service.MstAdminTdVO;
 import egovframework.www.mgr.master.service.MstBannerTdVO;
 import egovframework.www.mgr.master.service.MstGroupTdVO;
+import egovframework.www.mgr.master.service.MstMenucateTdVO;
 
 /**
  * @Class MgrMasterController.java
@@ -504,5 +505,128 @@ public class MgrMasterController extends MgrSessionController{
 		
 		return "mgr/menu/branchMenu";
 	}
+	
+	/**
+	 * @author seoys
+	 * @date 2015. 4. 3.
+	 * @Description : 메뉴카테고리 리스트
+	 * @MethodName mgrMenuList
+	 * @param menuVO
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/mgr/menuList.gn", produces={"application/json"})
+	public @ResponseBody Object mgrMenuList(
+			MstMenucateTdVO menuVO
+	) throws Exception{
+		List<MstMenucateTdVO> resultList = null;
+		
+		try {
+			menuVO.setUser_id("mgrgni");
+			resultList = mgrMasterService.mgrMenuCategoryList(menuVO);
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.error("[ERROR]: " + MgrMasterController.class.getName() + ".mgrMenuList(): " + e.getMessage(), e);
+		}
+		return resultList;
+	}
+	
+	/**
+	 * @author seoys
+	 * @date 2015. 4. 3.
+	 * @Description : 메뉴카테고리 등록/수정
+	 * @MethodName mgrMenuIns
+	 * @param model
+	 * @param response
+	 * @param request
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/mgr/menuCategoryProc.gn")
+	public void mgrMenuCategoryUpsert(
+		ModelMap model,
+		HttpServletResponse response,
+		HttpServletRequest request,
+		MstMenucateTdVO menuVO
+	) throws Exception{
+		try {
+			menuVO.setUser_id("mgrgni");
+			menuVO.setIndex_sq(57);
+			
+//			선택한 카테고리가 있다면 하위카테고리로 등록!
+			if(menuVO.getSel_cate() > 0){
+				String calNum = Integer.toString(menuVO.getSel_cate());
+				int intCalNum = menuVO.getSel_cate();
+				
+//				1deps를 선택했다면..
+				if(calNum.substring(3, 9).equals("100100")){
+					intCalNum = intCalNum + 1000000;
+					menuVO.setMax_cate(intCalNum);
+					menuVO.setMin_cate(menuVO.getSel_cate());
+					logger.error(">>>>>>>>" + menuVO.getMin_cate());
+					logger.error(">>>>>>>>" + menuVO.getMax_cate());
+					
+					int resultNum = mgrMasterService.mgrMenuCateMaxNum(menuVO);
+					resultNum += 1000;
+					menuVO.setCate_cd(resultNum);
+//				2deps를 선택했다면..
+				}else if(calNum.substring(6, 9).equals("100")){
+					intCalNum = intCalNum + 100000;
+					menuVO.setMax_cate(intCalNum);
+					menuVO.setMin_cate(menuVO.getSel_cate());
+					
+
+					logger.error(">>>>>>>>" + menuVO.getMin_cate());
+					logger.error(">>>>>>>>" + menuVO.getMax_cate());
+					int resultNum = mgrMasterService.mgrMenuCateMaxNum(menuVO);
+					resultNum += 1;
+					menuVO.setCate_cd(resultNum);
+				}
+				
+			}
+			mgrMasterService.mgrMenuCategoryUpsert(menuVO);
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.error("[ERROR]: " + MgrMasterController.class.getName() + ".mgrMenuCategoryUpsert(): " + e.getMessage(), e);
+		}
+	}
+	
+	/**
+	 * @author seoys
+	 * @date 2015. 4. 6.
+	 * @Description : 메뉴카테고리 삭제
+	 * @MethodName mgrMenuCategoryDel
+	 * @param response
+	 * @param request
+	 * @param menuVO
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/mgr/menuCategoryDel.gn")
+	public String mgrMenuCategoryDel(
+			ModelMap model,
+			HttpServletResponse response,
+			HttpServletRequest request,
+			MstMenucateTdVO menuVO
+	) throws Exception{
+		try {
+			msgVO = new MsgVO();
+			
+			if(menuVO.getCate_cd() == 0){
+				msgVO.setMsg("필수정보가 없습니다.");
+	        	msgVO.setUrl("/mgr/menuMain.gn");
+			}else{
+				mgrMasterService.mgrMenuCategoryDel(menuVO);
+				msgVO.setMsg("정상적으로 삭제 하였습니다.");
+	        	msgVO.setUrl("/mgr/menuMain.gn");
+			}			
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.error("[ERROR]: " + MgrMasterController.class.getName() + ".mgrMenuCategoryDel(): " + e.getMessage(), e);
+		}
+		
+		model.addAttribute("msgVO",msgVO);
+		return "alert";	
+	};
+	
+	
 	
 }

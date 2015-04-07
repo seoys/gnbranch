@@ -7,7 +7,8 @@
 	<div id="dialog" title="Basic dialog">
 		<p id="id_dialog"></p>
 	</div>
-
+	
+	<!-- vender include -->
 	<script src="/js/jquery-1.10.2.js"></script>
 	<script src="/js/bootstrap.min.js"></script>	
 	<script src="/js/common_ui.js"></script>

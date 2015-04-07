@@ -13,6 +13,7 @@ import egovframework.www.mgr.master.service.MstAdminTdVO;
 import egovframework.www.mgr.master.service.MstBannerTdVO;
 import egovframework.www.mgr.master.service.MstGroupTdVO;
 import egovframework.www.mgr.master.service.MgrMasterService;
+import egovframework.www.mgr.master.service.MstMenucateTdVO;
 
 /**
  * @Class MgrMasterServiceImpl.java
@@ -82,6 +83,26 @@ public class MgrMasterServiceImpl extends EgovAbstractServiceImpl implements Mgr
 	
 	public Map<String,Object> mgrBannerInfo(MstBannerTdVO mstBannerTdVO) throws Exception{
 		return mgrMasterMapper.mgrBannerInfo(mstBannerTdVO);
+	}
+
+	public List<MstMenucateTdVO> mgrMenuCategoryList(MstMenucateTdVO menuVO) throws Exception {
+		return mgrMasterMapper.mgrMenuCategoryList(menuVO);
+	}
+
+	public void mgrMenuCategoryUpsert(MstMenucateTdVO menuVO) throws Exception {
+		// TODO Auto-generated method stub
+		mgrMasterMapper.mgrMenuCategoryUpsert(menuVO);
+	}
+
+	public void mgrMenuCategoryDel(MstMenucateTdVO menuVO) throws Exception {
+		// TODO Auto-generated method stub
+		mgrMasterMapper.mgrMenuCategoryDel(menuVO);
+		
+	}
+
+	public int mgrMenuCateMaxNum(MstMenucateTdVO menuVO) throws Exception {
+		// TODO Auto-generated method stub
+		return mgrMasterMapper.mgrMenuCateMaxNum(menuVO);
 	}
 	
 }

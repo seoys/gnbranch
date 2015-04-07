@@ -39,5 +39,11 @@ public interface MgrMasterService {
 	
 	Map<String,Object> mgrBannerInfo(MstBannerTdVO mstBannerTdVO) throws Exception;
 	
+	List<MstMenucateTdVO> mgrMenuCategoryList(MstMenucateTdVO menuVO) throws Exception;
 	
+	void mgrMenuCategoryUpsert(MstMenucateTdVO menuVO) throws Exception;
+	
+	void mgrMenuCategoryDel(MstMenucateTdVO menuVO) throws Exception;
+	
+	int mgrMenuCateMaxNum(MstMenucateTdVO menuVO) throws Exception;
 }
