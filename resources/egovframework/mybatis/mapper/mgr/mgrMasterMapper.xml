@@ -311,17 +311,69 @@
 	
 	<!-- 메뉴카테고리 삭제 -->
 	<delete id="mgrMenuCategoryDel" parameterType="mstMenucateTdVO">
-		DELETE FROM MST_MENUCATE_TD
+		<!-- DELETE FROM MST_MENUCATE_TD -->
+		
+		UPDATE MST_MENUCATE_TD
+			SET USE_FL = 'N'		
 		<where>
-			cate_cd = #{cate_cd}
+			<choose>
+				<when test="depth == 1">
+<![CDATA[		
+			CATE_CD >= #{min_cate} AND CATE_CD < #{max_cate}
+]]>
+				</when>
+				<when test="depth == 2">
+<![CDATA[		
+			CATE_CD >= #{min_cate} AND CATE_CD < #{max_cate}
+]]>
+				</when>
+				<when test="depth == 3">
+					cate_cd = #{cate_cd}
+				</when>
+			</choose>
 		</where>
 	</delete>
 	
 	<!-- 메뉴카테고리 지정된 max값 가져오기 -->
 	<select id="mgrMenuCateMaxNum" parameterType="mstMenucateTdVO" resultType="int">
+	
 		SELECT MAX(CATE_CD) FROM MST_MENUCATE_TD
 		<where>
-		CATE_CD BETWEEN #{min_cate} AND #{max_cate}
+			USE_FL = 'Y' 
+<![CDATA[		
+			AND CATE_CD >= #{min_cate} AND CATE_CD < #{max_cate}
+]]>
 		</where>
+	</select>
+	
+	<!-- 메뉴별 컨텐츠 생성List -->
+	<select id="mgrTemplateList" parameterType="mstContinfoTdVO" resultType="mstContinfoTdVO">
+		SELECT 
+			CON_SQ, AKIND_FL, TKIND_FL, GROUP_SQ, INDEX_SQ
+			,(SELECT GROUP_NM FROM MST_GROUP_TD B WHERE B.GROUP_SQ = A.GROUP_SQ) AS GROUP_NM 
+		FROM MST_CONTINFO_TD A
+	</select>
+	
+	<!-- 메뉴별 컨텐츠 생성Upsert -->
+	<select id="mgrTemplateUpsert" parameterType="mstContinfoTdVO" resultType="mstContinfoTdVO">
+		MERGE
+		    MST_CONTINFO_TD AS T
+		USING
+		    (SELECT #{con_sq}, #{akind_fl}, #{tkind_fl}, #{group_sq}, #{index_sq}) AS S
+		    (con_sq, akind_fl, tkind_fl, group_sq, index_sq)
+		ON
+		  T.con_sq = S.con_sq
+		WHEN MATCHED THEN
+		    UPDATE SET
+		        T.akind_fl = S.akind_fl,
+		        T.tkind_fl = S.tkind_fl,
+		        T.group_sq = S.group_sq,
+		        T.index_sq = S.index_sq  
+		WHEN NOT MATCHED BY TARGET THEN
+		    INSERT
+		        (akind_fl, tkind_fl, group_sq, index_sq)
+		    VALUES
+		        (s.akind_fl, s.tkind_fl, s.group_sq, s.index_sq)     
+		OUTPUT $action as ACTION , INSERTED.*,DELETED.*;
 	</select>
 </mapper>

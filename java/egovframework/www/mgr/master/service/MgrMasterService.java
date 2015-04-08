@@ -46,4 +46,8 @@ public interface MgrMasterService {
 	void mgrMenuCategoryDel(MstMenucateTdVO menuVO) throws Exception;
 	
 	int mgrMenuCateMaxNum(MstMenucateTdVO menuVO) throws Exception;
+	
+	List<MstContinfoTdVO> mgrTemplateList(MstContinfoTdVO continfoVO) throws Exception;
+	
+	MstContinfoTdVO mgrTemplateUpsert(MstContinfoTdVO continfoVO) throws Exception;
 }

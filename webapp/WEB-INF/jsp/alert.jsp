@@ -27,6 +27,7 @@ if(msg != ""){
 	alert(msg);
 }
 
+
 if(url == "")
 	url = "/";
 

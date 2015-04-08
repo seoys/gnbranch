@@ -142,13 +142,13 @@
 									<li class="${depth12Active}"><a href="/mgr/accountList.gn">- 지부 관리자 계정 관리</a></li>
 		                        </ul>
 		                    </li>
-							<li class="masterMenu">
+							<!-- <li class="masterMenu">
 								<a href="#none">지부 설정</a>
 								<ul class="nav-second-level">
 									<li><a href="#">- 지부 정보 수정</a></li>
 									<li><a href="#">- 메인 컨텐츠 설정</a></li>
 								</ul>
-							</li>
+							</li> -->
 							<li>
 		                        <a href="/mgr/bannerMList.gn">지부 메인 관리</a>
 		                        <ul class="nav-second-level">
@@ -158,16 +158,19 @@
 		                    </li>
 		                    
 							<li class="masterMenu">
-								<a href="#none">페이지 설정</a>
+								<a href="/mgr/menuTemplateList.gn">페이지 설정</a>
 								<ul class="nav-second-level">
-									<li><a href="#">- 메뉴별 컨텐츠 생성</a></li>
-									<li><a href="#">- 상세 컨텐츠 관리</a></li>
+									<li class="${depth41Active}"><a href="/mgr/menuTemplateList.gn">- 메뉴별 컨텐츠 생성</a></li>
+									<li class="${depth42Active}"><a href="#">- 상세 컨텐츠 관리</a></li>
 								</ul>
 							</li>
-							<li>
-								<a href="/mgr/menuMain.gn">메뉴 생성</a>
+							<li  class="masterMenu">
+								<a href="/mgr/menuMain.gn">메뉴 관리</a>
+								<ul class="nav-second-level">
+									<li class="${depth51Active}"><a href="/mgr/menuMain.gn">- 메뉴 생성</a></li>
+								</ul>
 							</li>
-							<li>
+							<!-- <li>
 								<a href="#none">자원봉사신청 관리</a>
 								<ul class="nav-second-level">
 									<li><a href="#">- 자원봉사신청 등록</a></li>
@@ -181,7 +184,7 @@
 									<li><a href="#">- 교육 신청자 관리</a></li>
 								</ul>
 							</li>
-							<li><a href="#">온라인 문의</a></li>
+							<li><a href="#">온라인 문의</a></li> -->
 						</ul>
 					</c:otherwise>
 				</c:choose>

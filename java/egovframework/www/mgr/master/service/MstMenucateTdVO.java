@@ -30,8 +30,16 @@ public class MstMenucateTdVO {
 	public int max_cate = 0;
 //	카테고리 max값 검색시 필요	
 	public int min_cate = 0;
-		
+//	뎁스체크시 필요
+	public int depth = 0;
 	
+	
+	public int getDepth() {
+		return depth;
+	}
+	public void setDepth(int depth) {
+		this.depth = depth;
+	}
 	public int getMax_cate() {
 		return max_cate;
 	}

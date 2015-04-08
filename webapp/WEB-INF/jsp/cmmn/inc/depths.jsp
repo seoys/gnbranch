@@ -7,6 +7,9 @@
 	<c:if test="${status.count == 7}"><c:set var="depth3" value="${fn:replace(list,'.jsp','')}"/></c:if>
 </c:forEach>
 
+
+<%-- ${depth2}
+${depth3} --%>
 <!-- 2depth 메뉴정의 -->
 <c:choose>
 	<c:when test="${depth2 == 'master'}">
@@ -14,6 +17,12 @@
 	</c:when>
 	<c:when test="${depth2 == 'branchMain'}">
 		<c:set var="depth2Msg" value="지부 메인 관리"/>
+	</c:when>
+	<c:when test="${depth2 == 'menu'}">
+		<c:set var="depth2Msg" value="메뉴 관리"/>
+	</c:when>
+	<c:when test="${depth2 == 'page'}">
+		<c:set var="depth2Msg" value="페이지 설정"/>
 	</c:when>
 </c:choose>
 
@@ -37,6 +46,15 @@
 			<c:set var="depth3Msg" value="패밀리 배너"/>
 		<c:set var="depth32Active" value="active"/>
 		</c:if>
-		
+	</c:when>
+	
+	<c:when test="${depth3 == 'htmlAdminList'}">
+		<c:set var="depth3Msg" value="메뉴별 컨텐츠 생성"/>
+		<c:set var="depth41Active" value="active"/>
+	</c:when>
+	
+	<c:when test="${depth3 == 'branchMenu'}">
+		<c:set var="depth3Msg" value="메뉴 생성"/>
+		<c:set var="depth51Active" value="active"/>
 	</c:when>
 </c:choose>

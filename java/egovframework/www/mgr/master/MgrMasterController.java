@@ -1,5 +1,6 @@
 package egovframework.www.mgr.master;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,7 @@ import egovframework.www.mgr.master.service.DetAdminTdVO;
 import egovframework.www.mgr.master.service.MgrMasterService;
 import egovframework.www.mgr.master.service.MstAdminTdVO;
 import egovframework.www.mgr.master.service.MstBannerTdVO;
+import egovframework.www.mgr.master.service.MstContinfoTdVO;
 import egovframework.www.mgr.master.service.MstGroupTdVO;
 import egovframework.www.mgr.master.service.MstMenucateTdVO;
 
@@ -554,35 +556,36 @@ public class MgrMasterController extends MgrSessionController{
 			
 //			선택한 카테고리가 있다면 하위카테고리로 등록!
 			if(menuVO.getSel_cate() > 0){
-				String calNum = Integer.toString(menuVO.getSel_cate());
+				String stringCalNum = Integer.toString(menuVO.getSel_cate());
 				int intCalNum = menuVO.getSel_cate();
 				
-//				1deps를 선택했다면..
-				if(calNum.substring(3, 9).equals("100100")){
-					intCalNum = intCalNum + 1000000;
-					menuVO.setMax_cate(intCalNum);
-					menuVO.setMin_cate(menuVO.getSel_cate());
-					logger.error(">>>>>>>>" + menuVO.getMin_cate());
-					logger.error(">>>>>>>>" + menuVO.getMax_cate());
-					
-					int resultNum = mgrMasterService.mgrMenuCateMaxNum(menuVO);
-					resultNum += 1000;
-					menuVO.setCate_cd(resultNum);
-//				2deps를 선택했다면..
-				}else if(calNum.substring(6, 9).equals("100")){
-					intCalNum = intCalNum + 100000;
-					menuVO.setMax_cate(intCalNum);
-					menuVO.setMin_cate(menuVO.getSel_cate());
-					
-
-					logger.error(">>>>>>>>" + menuVO.getMin_cate());
-					logger.error(">>>>>>>>" + menuVO.getMax_cate());
-					int resultNum = mgrMasterService.mgrMenuCateMaxNum(menuVO);
-					resultNum += 1;
-					menuVO.setCate_cd(resultNum);
-				}
+//              1deps를 선택했다면..
+                if(stringCalNum.substring(3, 9).equals("100100")){
+                	intCalNum = intCalNum + 1000000;
+                	menuVO.setMax_cate(intCalNum);
+                    menuVO.setMin_cate(menuVO.getSel_cate());
+                    menuVO.setDepth(1);
+                     
+                    int resultNum = mgrMasterService.mgrMenuCateMaxNum(menuVO);
+                    resultNum += 1000;
+                    String changeCode = Integer.toString(resultNum);
+                    int intChangeCode = Integer.parseInt(changeCode.substring(0,6) + "100");
+                    menuVO.setCate_cd(intChangeCode);
+//                    logger.error(">" + intChangeCode);
+//              2deps를 선택했다면..
+                }else if(stringCalNum.substring(6, 9).equals("100")){
+                	intCalNum = intCalNum + 100;
+                    menuVO.setMax_cate(intCalNum);
+                    menuVO.setMin_cate(menuVO.getSel_cate());
+                    
+                    int resultNum = mgrMasterService.mgrMenuCateMaxNum(menuVO);
+                    resultNum += 1;
+                    menuVO.setCate_cd(resultNum);
+//                    logger.error(">" + resultNum);
+                }
 				
 			}
+			 
 			mgrMasterService.mgrMenuCategoryUpsert(menuVO);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -614,9 +617,26 @@ public class MgrMasterController extends MgrSessionController{
 				msgVO.setMsg("필수정보가 없습니다.");
 	        	msgVO.setUrl("/mgr/menuMain.gn");
 			}else{
+				String stringCalNum = Integer.toString(menuVO.getCate_cd());
+				int intCalNum = menuVO.getCate_cd();
+				
+				if(stringCalNum.substring(3, 9).equals("100100")){
+					intCalNum = intCalNum + 1000000;
+					menuVO.setDepth(1);
+					menuVO.setMax_cate(intCalNum);
+                    menuVO.setMin_cate(menuVO.getCate_cd());
+                    
+				}else if(stringCalNum.substring(6, 9).equals("100")){
+					menuVO.setDepth(2);
+					intCalNum = intCalNum + 100;
+                    menuVO.setMax_cate(intCalNum);
+                    menuVO.setMin_cate(menuVO.getCate_cd());
+				}else{
+					menuVO.setDepth(3);
+				}
+				
 				mgrMasterService.mgrMenuCategoryDel(menuVO);
-				msgVO.setMsg("정상적으로 삭제 하였습니다.");
-	        	msgVO.setUrl("/mgr/menuMain.gn");
+				msgVO.setUrl("/mgr/menuMain.gn");
 			}			
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -628,5 +648,52 @@ public class MgrMasterController extends MgrSessionController{
 	};
 	
 	
+	@RequestMapping(value="/mgr/menuTemplateList.gn")
+	public String mgrTemplateList(
+		ModelMap model,
+		HttpServletResponse response,
+		HttpServletRequest request,
+		MstGroupTdVO mstGroupTdVO,
+		MstContinfoTdVO mstConinfoTdVO
+	) throws Exception{
+		try {
+//			그룹 리스트
+			List<MstGroupTdVO> resultList = mgrMasterService.mgrGroupList(mstGroupTdVO);
+			model.addAttribute("resultList", resultList);
+			
+			List<MstContinfoTdVO> tplResult = mgrMasterService.mgrTemplateList(mstConinfoTdVO);
+			model.addAttribute("tplResult", tplResult);
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.error("[ERROR]: " + MgrMasterController.class.getName() + ".mgrMenuCategoryDel(): " + e.getMessage(), e);
+		}
+		
+		return "mgr/page/htmlAdminList";
+	}
+	
+	@RequestMapping(value="/mgr/menuTemplateProc.gn", produces={"application/json"})
+	public @ResponseBody Object mgrTempateProc(
+			ModelMap model,
+			HttpServletResponse response,
+			HttpServletRequest request,
+			MstContinfoTdVO mstConinfoTdVO
+	) throws Exception{
+		List<MstContinfoTdVO> resultList = new ArrayList<MstContinfoTdVO>();
+		
+		try {
+			MstContinfoTdVO resultVO = mgrMasterService.mgrTemplateUpsert(mstConinfoTdVO);
+			
+			if(resultVO.getCon_sq() > 0){
+				resultList = mgrMasterService.mgrTemplateList(mstConinfoTdVO);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.error("[ERROR]: " + MgrMasterController.class.getName() + ".mgrTempateProc(): " + e.getMessage(), e);
+		}
+		
+		return resultList;
+	}
 	
 }

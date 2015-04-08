@@ -7,6 +7,7 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import egovframework.www.mgr.master.service.DetAdminTdVO;
 import egovframework.www.mgr.master.service.MstAdminTdVO;
 import egovframework.www.mgr.master.service.MstBannerTdVO;
+import egovframework.www.mgr.master.service.MstContinfoTdVO;
 import egovframework.www.mgr.master.service.MstGroupTdVO;
 import egovframework.www.mgr.master.service.MstMenucateTdVO;
 
@@ -54,4 +55,8 @@ public interface MgrMasterMapper {
 	public void mgrMenuCategoryDel(MstMenucateTdVO menuVO);
 	
 	public int mgrMenuCateMaxNum(MstMenucateTdVO menuVO);
+	
+	public List<MstContinfoTdVO> mgrTemplateList(MstContinfoTdVO continfoVO);
+	
+	public MstContinfoTdVO mgrTemplateUpsert(MstContinfoTdVO continfoVO);
 }

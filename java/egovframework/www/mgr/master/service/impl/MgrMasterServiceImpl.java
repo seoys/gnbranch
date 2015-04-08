@@ -11,6 +11,7 @@ import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.www.mgr.master.service.DetAdminTdVO;
 import egovframework.www.mgr.master.service.MstAdminTdVO;
 import egovframework.www.mgr.master.service.MstBannerTdVO;
+import egovframework.www.mgr.master.service.MstContinfoTdVO;
 import egovframework.www.mgr.master.service.MstGroupTdVO;
 import egovframework.www.mgr.master.service.MgrMasterService;
 import egovframework.www.mgr.master.service.MstMenucateTdVO;
@@ -103,6 +104,18 @@ public class MgrMasterServiceImpl extends EgovAbstractServiceImpl implements Mgr
 	public int mgrMenuCateMaxNum(MstMenucateTdVO menuVO) throws Exception {
 		// TODO Auto-generated method stub
 		return mgrMasterMapper.mgrMenuCateMaxNum(menuVO);
+	}
+
+	public MstContinfoTdVO mgrTemplateUpsert(MstContinfoTdVO continfoVO)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return mgrMasterMapper.mgrTemplateUpsert(continfoVO);
+	}
+
+	public List<MstContinfoTdVO> mgrTemplateList(MstContinfoTdVO continfoVO)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return mgrMasterMapper.mgrTemplateList(continfoVO);
 	}
 	
 }
