@@ -68,14 +68,17 @@
 		                            <li><a href="#">- 메인 컨텐츠 설정</a></li>
 		                        </ul>
 		                    </li>
-		                    <li>
-								<a href="/mgr/menuMain.gn">메뉴 생성</a>
-							</li>
-							<li class="masterMenu">
-								<a href="#none">페이지 설정</a>
+		                   <li class="masterMenu">
+								<a href="/mgr/menuTemplateList.gn">페이지 설정</a>
 								<ul class="nav-second-level">
-									<li><a href="#">- 메뉴별 컨텐츠 생성</a></li>
-									<li><a href="#">- 상세 컨텐츠 관리</a></li>
+									<li class="${depth41Active}"><a href="/mgr/menuTemplateList.gn">- 메뉴별 컨텐츠 생성</a></li>
+									<li class="${depth42Active}"><a href="#">- 상세 컨텐츠 관리</a></li>
+								</ul>
+							</li>
+							<li  class="masterMenu">
+								<a href="/mgr/menuMain.gn">메뉴 관리</a>
+								<ul class="nav-second-level">
+									<li class="${depth51Active}"><a href="/mgr/menuMain.gn">- 메뉴 생성</a></li>
 								</ul>
 							</li>
 							

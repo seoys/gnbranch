@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-	<jsp:include page="/mgr/include/inc_header.jsp" flush="false" />
+	<%@ include file="/mgr/include/inc_header.jsp" %>
 			<!-- pageContents -->
 			<div id="page-wrapper">
 				<!-- pageTitle -->
-				<jsp:include page="/mgr/include/inc_pageTitle.jsp" flush="false" />
+				<%@ include file="/mgr/include/inc_pageTitle.jsp" %>
 
 				<div class="contents">
 					<!-- admin page contents start -->
@@ -20,12 +20,31 @@
 							<tbody>
 								<tr>
 									<th scope="row">적용그룹</th>
-									<td>아동보호전문기관</td>
+									<td>
+									<c:forEach var="list" items="${resultList}" varStatus="status">
+									<c:if test="${list.group_sq == continfoVO.group_sq}">
+									  ${list.group_nm}
+                               	 	</c:if>
+	                               </c:forEach>
+	                               
+									</td>
 								</tr>
 								<tr>
 									<th scope="row">페이지종류 &amp; 형태 </th>
 									<!-- 페이지선택 항목 노출 -->
-									<td>종류 : <em>HTML</em> 템플릿형태 : <em>없음</em></td>
+									<td>종류 : <em>
+									<c:if test="${fn:trim(continfoVO.akind_fl) == '0'}">HTML</c:if>
+									<c:if test="${fn:trim(continfoVO.akind_fl) == '1'}">게시판</c:if>
+									</em> 템플릿형태 : <em>
+									<c:if test="${fn:trim(continfoVO.tkind_fl) == '0'}">해당없음</c:if>
+									<c:if test="${fn:trim(continfoVO.tkind_fl) == '1'}">인사말</c:if>
+									<c:if test="${fn:trim(continfoVO.tkind_fl) == '2'}">지부소개</c:if>
+									<c:if test="${fn:trim(continfoVO.tkind_fl) == '3'}">연혁</c:if>
+									<c:if test="${fn:trim(continfoVO.tkind_fl) == '4'}">일반게시판</c:if>
+									<c:if test="${fn:trim(continfoVO.tkind_fl) == '5'}">일반게시판(기간포함)</c:if>
+									<c:if test="${fn:trim(continfoVO.tkind_fl) == '6'}">썸네일형게시판</c:if>
+									<c:if test="${fn:trim(continfoVO.tkind_fl) == '7'}">갤러리형게시판</c:if>
+									</em></td>
 								</tr>
 								<tr>
 									<th scope="row">HTML 페이지명</th>
@@ -39,6 +58,7 @@
 									<th scope="row">내용</th>
 									<td class="editorWrap">
 										<!-- 에디터영역 -->
+										<textarea name="editor1"></textarea>
 									</td>
 								</tr>
 								<tr>
@@ -62,7 +82,7 @@
 						<div class="btnarea">
 							<div class="fr">
 								<button class="btn btn-green">등록</button>
-								<button class="btn btn-green">취소</button>
+								<button class="btn btn-green" id="btn_cancel">취소</button>
 							</div>
 						</div>
 						<!-- //button -->
@@ -76,6 +96,16 @@
 		<!-- //contentsWrapper -->
 	</div>
 	
-	<jsp:include page="/mgr/include/inc_footer.jsp" flush="false" />
+	<%@ include file="/mgr/include/inc_footer.jsp" %>
+	<script src="/ckeditor/ckeditor.js"></script>
+	<script type="text/javascript">
+	    CKEDITOR.replace('editor1',{enterMode:'2',shiftEnterMode:'3',filebrowserUploadUrl: '/upload'});
+	    
+		$(document).ready(function(){
+			$("#btn_cancel").on("click",function(){
+				location.href = "/mgr/menuTemplateList.gn";
+			});
+		});
+	</script>
 </body>
 </html>

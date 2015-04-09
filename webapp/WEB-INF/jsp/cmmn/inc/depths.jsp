@@ -48,7 +48,7 @@ ${depth3} --%>
 		</c:if>
 	</c:when>
 	
-	<c:when test="${depth3 == 'htmlAdminList'}">
+	<c:when test="${depth3 == 'htmlAdminList' || depth3 == 'htmlAdminWrite'}">
 		<c:set var="depth3Msg" value="메뉴별 컨텐츠 생성"/>
 		<c:set var="depth41Active" value="active"/>
 	</c:when>

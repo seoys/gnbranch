@@ -648,6 +648,19 @@ public class MgrMasterController extends MgrSessionController{
 	};
 	
 	
+	/**
+	 * @author seoys
+	 * @date 2015. 4. 9.
+	 * @Description : 페이지 설정 리스트
+	 * @MethodName mgrTemplateList
+	 * @param model
+	 * @param response
+	 * @param request
+	 * @param mstGroupTdVO
+	 * @param mstConinfoTdVO
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/mgr/menuTemplateList.gn")
 	public String mgrTemplateList(
 		ModelMap model,
@@ -673,6 +686,18 @@ public class MgrMasterController extends MgrSessionController{
 		return "mgr/page/htmlAdminList";
 	}
 	
+	/**
+	 * @author seoys
+	 * @date 2015. 4. 9.
+	 * @Description : 페이지 생성
+	 * @MethodName mgrTempateProc
+	 * @param model
+	 * @param response
+	 * @param request
+	 * @param mstConinfoTdVO
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/mgr/menuTemplateProc.gn", produces={"application/json"})
 	public @ResponseBody Object mgrTempateProc(
 			ModelMap model,
@@ -694,6 +719,52 @@ public class MgrMasterController extends MgrSessionController{
 		}
 		
 		return resultList;
+	}
+	
+	@RequestMapping(value="/mgr/menuTemplateWrite.gn")
+	public String mgrHtmlWrite(
+		ModelMap model,
+		HttpServletResponse response,
+		HttpServletRequest request,
+		MstGroupTdVO mstGroupTdVO,
+		@ModelAttribute("continfoVO") MstContinfoTdVO mstConinfoTdVO
+	) throws Exception{
+		try {
+//			그룹 리스트
+			List<MstGroupTdVO> resultList = mgrMasterService.mgrGroupList(mstGroupTdVO);
+			model.addAttribute("resultList", resultList);
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.error("[ERROR]: " + MgrMasterController.class.getName() + ".mgrHtmlWrite(): " + e.getMessage(), e);
+		}
+		return "mgr/page/htmlAdminWrite";
+	}
+	
+	@RequestMapping(value="/editor/upload.gn", method = RequestMethod.POST)
+	public void editorFileupload(
+			ModelMap model,
+			HttpServletRequest request,
+			final MultipartHttpServletRequest multiRequest
+	) throws Exception{
+        // 파일 업로드
+        List<FileVO> result = null;
+        final Map<String, MultipartFile> files = multiRequest.getFileMap();
+        int idenkey = 0;
+        
+        if (!files.isEmpty()) {
+            result = fileUtil.parseFileInf(files, "gni_", 0, "FILEUPLOAD", "IMG.BOARD.PATH", "",idenkey);
+            if(result.size() > 0){
+                FileVO vo = (FileVO) result.get(0);
+        		Iterator iter = result.iterator();
+        		while (iter.hasNext()) {
+        			vo = (FileVO) iter.next();
+        			fileSupportService.fileUpsert(vo);
+        		}
+           }
+        };
+        
 	}
 	
 }

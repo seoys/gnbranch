@@ -80,15 +80,34 @@
 <c:choose>
 	<c:when test="${!empty tplResult}">
 		<c:forEach items="${tplResult}" var="list" varStatus="status" >
-							<tr class="lock">
+							<!-- <tr class="lock"> -->
+							<tr>
 								<td>${list.group_nm }</td>
 								<td>
-									${list.akind_fl}
-									
+									<c:if test="${fn:trim(list.akind_fl) == '0'}">HTML</c:if>
+									<c:if test="${fn:trim(list.akind_fl) == '1'}">게시판</c:if>
 								</td>
-								<td>자원봉사모집</td>
-								<td>2014 연말자원봉사모집</td>
+								<td>
+									<c:choose>
+										<c:when test="${fn:trim(list.tkind_fl) == '0'}">해당없음</c:when>
+										<c:when test="${fn:trim(list.tkind_fl) == '1'}">인사말</c:when>
+										<c:when test="${fn:trim(list.tkind_fl) == '2'}">지부소개</c:when>
+										<c:when test="${fn:trim(list.tkind_fl) == '3'}">연혁</c:when>
+										<c:when test="${fn:trim(list.tkind_fl) == '4'}">일반게시판</c:when>
+										<c:when test="${fn:trim(list.tkind_fl) == '5'}">일반게시판(기간포함)</c:when>
+										<c:when test="${fn:trim(list.tkind_fl) == '6'}">썸네일형게시판</c:when>
+										<c:when test="${fn:trim(list.tkind_fl) == '7'}">갤러리형게시판</c:when>
+									</c:choose>
+								</td>
 								<td></td>
+								<td>
+									<c:if test="${fn:trim(list.akind_fl) == '0'}">
+									<a href="/mgr/menuTemplateWrite.gn?con_sq=${list.con_sq}&group_sq=${list.group_sq}&akind_fl=${fn:trim(list.akind_fl)}&tkind_fl=${fn:trim(list.tkind_fl)}" class="btn btn-orange">수정</a>
+									</c:if>
+									<c:if test="${fn:trim(list.akind_fl) == '1'}">
+									<a href="#" target="_blak" class="btn btn-orange">컨텐츠 생성</a>
+									</c:if>
+								</td>
 							</tr>
 		</c:forEach>							
 	</c:when>
@@ -137,11 +156,7 @@
 				var pars = $("form").serialize();
 				
 				$.getJSON(send,pars,function(xdata){
-					$.each(xdata,function(i,v){
-						log(v.akind_fl);
-					});
-					
-					$("form")[0].reset();
+					location.reload();
 				});
 				
 			});
