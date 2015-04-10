@@ -11,6 +11,7 @@
      <mvc:resources mapping="/js/**" location="/js/"/>
      <mvc:resources mapping="/images/**" location="/images/"/>
      <mvc:resources mapping="/ckeditor/**" location="/ckeditor/"/>
+     <mvc:resources mapping="/editorupload/**" location="/upload/editor/"/>
      
     <context:component-scan base-package="egovframework">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>

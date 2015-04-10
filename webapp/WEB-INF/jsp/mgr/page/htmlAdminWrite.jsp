@@ -99,13 +99,17 @@
 	<%@ include file="/mgr/include/inc_footer.jsp" %>
 	<script src="/ckeditor/ckeditor.js"></script>
 	<script type="text/javascript">
-	    CKEDITOR.replace('editor1',{enterMode:'2',shiftEnterMode:'3',filebrowserUploadUrl: '/upload'});
+	    CKEDITOR.replace('editor1',{enterMode:'2',shiftEnterMode:'3',filebrowserUploadUrl: '/editor/upload.gn'});
 	    
 		$(document).ready(function(){
 			$("#btn_cancel").on("click",function(){
 				location.href = "/mgr/menuTemplateList.gn";
 			});
 		});
+		
+		var CKEditorFuncNum = function(xdata){
+			log(xdata);
+		}
 	</script>
 </body>
 </html>

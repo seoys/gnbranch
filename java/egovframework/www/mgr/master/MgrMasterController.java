@@ -1,5 +1,6 @@
 package egovframework.www.mgr.master;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +29,7 @@ import egovframework.common.MsgVO;
 import egovframework.common.service.EgovFileMngUtil;
 import egovframework.common.service.FileSupportService;
 import egovframework.common.service.FileVO;
+import egovframework.common.util.EgovProperties;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import egovframework.www.mgr.login.MgrSessionController;
 import egovframework.www.mgr.login.service.impl.MgrMainServiceImpl;
@@ -742,28 +744,62 @@ public class MgrMasterController extends MgrSessionController{
 		return "mgr/page/htmlAdminWrite";
 	}
 	
+	/**
+	 * @author seoys
+	 * @date 2015. 4. 10.
+	 * @Description : ckeditor file upload
+	 * @MethodName editorFileupload
+	 * @param request
+	 * @param response
+	 * @param multiRequest
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/editor/upload.gn", method = RequestMethod.POST)
 	public void editorFileupload(
-			ModelMap model,
 			HttpServletRequest request,
+			HttpServletResponse response,
 			final MultipartHttpServletRequest multiRequest
 	) throws Exception{
-        // 파일 업로드
-        List<FileVO> result = null;
-        final Map<String, MultipartFile> files = multiRequest.getFileMap();
-        int idenkey = 0;
+		
+		PrintWriter printWriter = null;
+		String uploadFn = "";
+		response.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
+		
+		try {
+			// 파일 업로드
+	        List<FileVO> result = null;
+	        final Map<String, MultipartFile> files = multiRequest.getFileMap();
+	        int idenkey = 0;
+	        
+	        if (!files.isEmpty()) {
+	            result = fileUtil.parseFileInf(files, "gni_", 0, "EDITOR", "UPD.EDITOR.PATH", "",idenkey);
+	            if(result.size() > 0){
+	                FileVO vo = (FileVO) result.get(0);
+	        		Iterator iter = result.iterator();
+	        		while (iter.hasNext()) {
+	        			vo = (FileVO) iter.next();
+	        			uploadFn = vo.getChname_nm();
+	        			fileSupportService.fileUpsert(vo);
+	        		}
+	        		
+	        		String callback = request.getParameter("CKEditorFuncNum");
+	        		printWriter = response.getWriter();
+		            String fileUrl = EgovProperties.getProperty("SERVICE_URL") + EgovProperties.getProperty("UPD.EDITOR.REAL_PATH") + uploadFn; 	//url경로
+		            printWriter.println("<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction("
+		                    + callback
+		                    + ",'"
+		                    + fileUrl
+		                    + "','이미지를 업로드 하였습니다.'"
+		                    + ")</script>");
+		            printWriter.flush();
+	           }
+	        };
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.error("[ERROR]: " + MgrMasterController.class.getName() + ".editorFileupload(): " + e.getMessage(), e);
+		}
         
-        if (!files.isEmpty()) {
-            result = fileUtil.parseFileInf(files, "gni_", 0, "FILEUPLOAD", "IMG.BOARD.PATH", "",idenkey);
-            if(result.size() > 0){
-                FileVO vo = (FileVO) result.get(0);
-        		Iterator iter = result.iterator();
-        		while (iter.hasNext()) {
-        			vo = (FileVO) iter.next();
-        			fileSupportService.fileUpsert(vo);
-        		}
-           }
-        };
         
 	}
 	
