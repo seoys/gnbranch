@@ -350,7 +350,8 @@
 	<select id="mgrTemplateList" parameterType="mstContinfoTdVO" resultType="mstContinfoTdVO">
 		SELECT 
 			CON_SQ, AKIND_FL, TKIND_FL, GROUP_SQ, INDEX_SQ
-			,(SELECT GROUP_NM FROM MST_GROUP_TD B WHERE B.GROUP_SQ = A.GROUP_SQ) AS GROUP_NM 
+			,(SELECT GROUP_NM FROM MST_GROUP_TD B WHERE B.GROUP_SQ = A.GROUP_SQ) AS GROUP_NM
+			,(SELECT PAGE_NM FROM DET_PAGETEMP_TD B WHERE B.CON_SQ = A.CON_SQ) AS PAGE_NM 
 		FROM MST_CONTINFO_TD A
 	</select>
 	
@@ -375,5 +376,38 @@
 		    VALUES
 		        (s.akind_fl, s.tkind_fl, s.group_sq, s.index_sq)     
 		OUTPUT $action as ACTION , INSERTED.*,DELETED.*;
+	</select>
+	
+	<!-- 메뉴별 컨텐츠생성 Html -->
+	<select id="mgrHtmlUpsert" parameterType="detPagetplTdVO" resultType="hashMap">
+		MERGE
+            det_pagetemp_td AS T
+        USING
+            (SELECT #{pt_sq}, #{page_nm}, #{subtitle_nm}, #{contents_nm}, #{use_fl}, #{con_sq}, #{user_id}, #{reg_dt},#{edit_fl}) AS S
+            (pt_sq, page_nm, subtitle_nm, contents_nm, use_fl, con_sq, user_id, reg_dt,edit_fl)
+        ON
+          T.con_sq = S.con_sq
+        WHEN MATCHED THEN
+            UPDATE SET
+                t.page_nm = s.page_nm,
+                t.subtitle_nm = s.subtitle_nm,
+                t.contents_nm = s.contents_nm,
+                t.use_fl = s.use_fl,
+                t.user_id = s.user_id,
+                t.edit_fl = s.edit_fl
+        WHEN NOT MATCHED BY TARGET THEN
+            INSERT
+                (page_nm, subtitle_nm, contents_nm, use_fl, con_sq, user_id, reg_dt,edit_fl)
+            VALUES
+                (s.page_nm, s.subtitle_nm, s.contents_nm, s.use_fl,s.con_sq, s.user_id, getdate(),s.edit_fl)
+        OUTPUT $action as ACTION , INSERTED.*,DELETED.*;
+	</select>
+	
+	<!-- 메뉴별 컨덴츠 생성 페이지 템플릿 리스트 -->
+	<select id="mgrPageTplList" parameterType="mstContinfoTdVO" resultType="detPagetplTdVO">
+	Select pt_sq, page_nm, subtitle_nm, contents_nm, use_fl, con_sq, user_id, edit_fl from DET_PAGETEMP_TD
+	<where>
+		CON_SQ = #{con_sq}
+	</where>
 	</select>
 </mapper>

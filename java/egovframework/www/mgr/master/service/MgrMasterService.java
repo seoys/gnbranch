@@ -50,4 +50,9 @@ public interface MgrMasterService {
 	List<MstContinfoTdVO> mgrTemplateList(MstContinfoTdVO continfoVO) throws Exception;
 	
 	MstContinfoTdVO mgrTemplateUpsert(MstContinfoTdVO continfoVO) throws Exception;
+	
+	Map<String,Object> mgrHtmlUpsert(DetPagetplTdVO pageVO) throws Exception;
+	
+	DetPagetplTdVO mgrPageTplList(MstContinfoTdVO continfoVO) throws Exception;
+	
 }

@@ -17,6 +17,7 @@
 		<typeAlias alias="mstBannerTdVO" type="egovframework.www.mgr.master.service.MstBannerTdVO"/>
 		<typeAlias alias="mstMenucateTdVO" type="egovframework.www.mgr.master.service.MstMenucateTdVO"/>
 		<typeAlias alias="mstContinfoTdVO" type="egovframework.www.mgr.master.service.MstContinfoTdVO"/>
+		<typeAlias alias="detPagetplTdVO" type="egovframework.www.mgr.master.service.DetPagetplTdVO"/>
 		
 		
     </typeAliases>

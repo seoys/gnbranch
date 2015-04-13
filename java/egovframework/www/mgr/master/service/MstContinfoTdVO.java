@@ -23,9 +23,17 @@ public class MstContinfoTdVO {
 	
 //	관리자 그룹관리 그룹명
 	public String group_nm = "";
+//	관리자 페이지링크 페이지명
+	public String page_nm = "";
 	
+		
 	
-	
+	public String getPage_nm() {
+		return page_nm;
+	}
+	public void setPage_nm(String page_nm) {
+		this.page_nm = page_nm;
+	}
 	public String getGroup_nm() {
 		return group_nm;
 	}

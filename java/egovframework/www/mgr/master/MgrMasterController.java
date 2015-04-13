@@ -1,6 +1,5 @@
 package egovframework.www.mgr.master;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -29,11 +28,11 @@ import egovframework.common.MsgVO;
 import egovframework.common.service.EgovFileMngUtil;
 import egovframework.common.service.FileSupportService;
 import egovframework.common.service.FileVO;
-import egovframework.common.util.EgovProperties;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import egovframework.www.mgr.login.MgrSessionController;
 import egovframework.www.mgr.login.service.impl.MgrMainServiceImpl;
 import egovframework.www.mgr.master.service.DetAdminTdVO;
+import egovframework.www.mgr.master.service.DetPagetplTdVO;
 import egovframework.www.mgr.master.service.MgrMasterService;
 import egovframework.www.mgr.master.service.MstAdminTdVO;
 import egovframework.www.mgr.master.service.MstBannerTdVO;
@@ -250,7 +249,6 @@ public class MgrMasterController extends MgrSessionController{
 			DetAdminTdVO detAdminTdVO,
 			final MultipartHttpServletRequest multiRequest
 		) throws Exception{
-
 		
 		try {
 			msgVO = new MsgVO();
@@ -271,6 +269,7 @@ public class MgrMasterController extends MgrSessionController{
             Map<String,Object> aiResultList = mgrMasterService.mgrAccountInfoUpsert(detAdminTdVO);
 
             // 파일 업로드
+//            final MultipartHttpServletRequest multiRequest
             List<FileVO> result = null;
             final Map<String, MultipartFile> files = multiRequest.getFileMap();
             
@@ -412,8 +411,6 @@ public class MgrMasterController extends MgrSessionController{
 				model.addAttribute("resultMap", resultMap);
 			}
 			
-			
-			
 		} catch (Exception e) {
 			// TODO: handle exception
 			logger.error("[ERROR]: " + MgrMasterController.class.getName() + ".mgrBranchBannerWrite(): " + e.getMessage(), e);
@@ -443,6 +440,7 @@ public class MgrMasterController extends MgrSessionController{
 		
 		try {
 			msgVO = new MsgVO();
+			
 			Map<String,Object> resultList = mgrMasterService.mgrBannerUpsert(mstBannerTdVO);
 			
             int idenkey = 0;
@@ -612,6 +610,8 @@ public class MgrMasterController extends MgrSessionController{
 			HttpServletRequest request,
 			MstMenucateTdVO menuVO
 	) throws Exception{
+		
+		
 		try {
 			msgVO = new MsgVO();
 			
@@ -676,9 +676,9 @@ public class MgrMasterController extends MgrSessionController{
 			List<MstGroupTdVO> resultList = mgrMasterService.mgrGroupList(mstGroupTdVO);
 			model.addAttribute("resultList", resultList);
 			
+//			페이지 템플릿 리스트
 			List<MstContinfoTdVO> tplResult = mgrMasterService.mgrTemplateList(mstConinfoTdVO);
 			model.addAttribute("tplResult", tplResult);
-			
 			
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -723,8 +723,21 @@ public class MgrMasterController extends MgrSessionController{
 		return resultList;
 	}
 	
-	@RequestMapping(value="/mgr/menuTemplateWrite.gn")
-	public String mgrHtmlWrite(
+	/**
+	 * @author seoys
+	 * @date 2015. 4. 13.
+	 * @Description : 메뉴별 컨덴츠 설정 중 Html > 해당없음
+	 * @MethodName mgrHtmlWrite
+	 * @param model
+	 * @param response
+	 * @param request
+	 * @param mstGroupTdVO
+	 * @param mstConinfoTdVO
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/mgr/htmlBasicWrite.gn")
+	public String mgrHtmlBasicWrite(
 		ModelMap model,
 		HttpServletResponse response,
 		HttpServletRequest request,
@@ -736,71 +749,116 @@ public class MgrMasterController extends MgrSessionController{
 			List<MstGroupTdVO> resultList = mgrMasterService.mgrGroupList(mstGroupTdVO);
 			model.addAttribute("resultList", resultList);
 			
+			DetPagetplTdVO resultTplPage = mgrMasterService.mgrPageTplList(mstConinfoTdVO);
+			model.addAttribute("resultTplPage", resultTplPage);
 			
 		} catch (Exception e) {
-			// TODO: handle exception
 			logger.error("[ERROR]: " + MgrMasterController.class.getName() + ".mgrHtmlWrite(): " + e.getMessage(), e);
+			// TODO: handle exception
 		}
-		return "mgr/page/htmlAdminWrite";
+		return "mgr/page/htmlBasicWrite";
 	}
 	
 	/**
 	 * @author seoys
-	 * @date 2015. 4. 10.
-	 * @Description : ckeditor file upload
-	 * @MethodName editorFileupload
-	 * @param request
+	 * @date 2015. 4. 13.
+	 * @Description : 메뉴별 컨덴츠 설정 중 Html > 인사말
+	 * @MethodName mgrHtmlIntroWrite
+	 * @param model
 	 * @param response
-	 * @param multiRequest
+	 * @param request
+	 * @param mstGroupTdVO
+	 * @param mstConinfoTdVO
+	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/editor/upload.gn", method = RequestMethod.POST)
-	public void editorFileupload(
-			HttpServletRequest request,
-			HttpServletResponse response,
-			final MultipartHttpServletRequest multiRequest
+	@RequestMapping(value="/mgr/htmlIntroWrite.gn")
+	public String mgrHtmlIntroWrite(
+		ModelMap model,
+		HttpServletResponse response,
+		HttpServletRequest request,
+		@ModelAttribute("continfoVO") MstContinfoTdVO mstConinfoTdVO
+	) throws Exception{
+		try {
+			DetPagetplTdVO resultTplPage = mgrMasterService.mgrPageTplList(mstConinfoTdVO);
+			model.addAttribute("resultTplPage", resultTplPage);
+			
+
+			
+		} catch (Exception e) {
+			logger.error("[ERROR]: " + MgrMasterController.class.getName() + ".mgrHtmlWrite(): " + e.getMessage(), e);
+			// TODO: handle exception
+		}
+		return "mgr/page/htmlIntroWrite";
+	}
+	
+	/**
+	 * @author seoys
+	 * @date 2015. 4. 13.
+	 * @Description : 메뉴별 컨덴츠 설정 Proc
+	 * @MethodName mgrHtmlProc
+	 * @param model
+	 * @param response
+	 * @param request
+	 * @param pageVO
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/mgr/menuTemplateProc.gn")
+	public String mgrHtmlProc(
+		ModelMap model,
+		HttpServletResponse response,
+		HttpServletRequest request,
+		DetPagetplTdVO pageVO,
+		final MultipartHttpServletRequest multiRequest
 	) throws Exception{
 		
-		PrintWriter printWriter = null;
-		String uploadFn = "";
-		response.setCharacterEncoding("utf-8");
-        response.setContentType("text/html;charset=utf-8");
 		
 		try {
-			// 파일 업로드
-	        List<FileVO> result = null;
-	        final Map<String, MultipartFile> files = multiRequest.getFileMap();
-	        int idenkey = 0;
-	        
-	        if (!files.isEmpty()) {
-	            result = fileUtil.parseFileInf(files, "gni_", 0, "EDITOR", "UPD.EDITOR.PATH", "",idenkey);
-	            if(result.size() > 0){
+			msgVO = new MsgVO();
+			
+			Map<String,Object> resultList  = mgrMasterService.mgrHtmlUpsert(pageVO);
+			int idenkey = 0;
+			
+			for( String key : resultList.keySet() ){
+			    logger.info( String.format("키 : %s, 값 : %s", key, resultList.get(key)) );
+			    if(key.equals("CON_SQ")){
+			        idenkey =  Integer.parseInt(resultList.get("CON_SQ").toString());
+			    };
+			};
+	          
+//		  파일업로드
+//        final MultipartHttpServletRequest multiRequest
+          List<FileVO> result = null;
+          final Map<String, MultipartFile> files = multiRequest.getFileMap();
+          
+          if (!files.isEmpty()) {
+              result = fileUtil.parseFileInf(files, "gni_", 0, "MENU", "IMG.BOARD.PATH", "",idenkey);
+              if(result.size() > 0){
 	                FileVO vo = (FileVO) result.get(0);
 	        		Iterator iter = result.iterator();
 	        		while (iter.hasNext()) {
 	        			vo = (FileVO) iter.next();
-	        			uploadFn = vo.getChname_nm();
 	        			fileSupportService.fileUpsert(vo);
 	        		}
-	        		
-	        		String callback = request.getParameter("CKEditorFuncNum");
-	        		printWriter = response.getWriter();
-		            String fileUrl = EgovProperties.getProperty("SERVICE_URL") + EgovProperties.getProperty("UPD.EDITOR.REAL_PATH") + uploadFn; 	//url경로
-		            printWriter.println("<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction("
-		                    + callback
-		                    + ",'"
-		                    + fileUrl
-		                    + "','이미지를 업로드 하였습니다.'"
-		                    + ")</script>");
-		            printWriter.flush();
-	           }
-	        };
+             }
+         };
+        	
+		msgVO.setUrl("/mgr/menuTemplateList.gn");
+		
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.error("[ERROR]: " + MgrMasterController.class.getName() + ".editorFileupload(): " + e.getMessage(), e);
+			logger.error("[ERROR]: " + MgrMasterController.class.getName() + ".mgrHtmlProc(): " + e.getMessage(), e);
 		}
-        
-        
+		
+		model.addAttribute("msgVO",msgVO);
+		return "alert";
 	}
+	
+	
+	
+	
+	
+	
 	
 }

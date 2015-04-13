@@ -5,6 +5,7 @@ import java.util.Map;
 
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import egovframework.www.mgr.master.service.DetAdminTdVO;
+import egovframework.www.mgr.master.service.DetPagetplTdVO;
 import egovframework.www.mgr.master.service.MstAdminTdVO;
 import egovframework.www.mgr.master.service.MstBannerTdVO;
 import egovframework.www.mgr.master.service.MstContinfoTdVO;
@@ -59,4 +60,8 @@ public interface MgrMasterMapper {
 	public List<MstContinfoTdVO> mgrTemplateList(MstContinfoTdVO continfoVO);
 	
 	public MstContinfoTdVO mgrTemplateUpsert(MstContinfoTdVO continfoVO);
+	
+	public Map<String,Object> mgrHtmlUpsert(DetPagetplTdVO pageVO);
+	
+	public DetPagetplTdVO mgrPageTplList(MstContinfoTdVO continfoVO);
 }

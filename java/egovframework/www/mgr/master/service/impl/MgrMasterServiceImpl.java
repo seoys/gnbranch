@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.www.mgr.master.service.DetAdminTdVO;
+import egovframework.www.mgr.master.service.DetPagetplTdVO;
 import egovframework.www.mgr.master.service.MstAdminTdVO;
 import egovframework.www.mgr.master.service.MstBannerTdVO;
 import egovframework.www.mgr.master.service.MstContinfoTdVO;
@@ -117,5 +118,14 @@ public class MgrMasterServiceImpl extends EgovAbstractServiceImpl implements Mgr
 		// TODO Auto-generated method stub
 		return mgrMasterMapper.mgrTemplateList(continfoVO);
 	}
+
+	public Map<String,Object> mgrHtmlUpsert(DetPagetplTdVO pageVO) throws Exception {
+		// TODO Auto-generated method stub
+		return mgrMasterMapper.mgrHtmlUpsert(pageVO);
+	}
 	
+	public DetPagetplTdVO mgrPageTplList(MstContinfoTdVO continfoVO) throws Exception {
+		// TODO Auto-generated method stub
+		return mgrMasterMapper.mgrPageTplList(continfoVO);
+	}
 }

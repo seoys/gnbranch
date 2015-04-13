@@ -4,6 +4,10 @@ jQuery.validator.setDefaults({
 	onfocusout:false,
 	errorPlacement: function(error, element) {
 //		log("Error: " + element.attr("name") );
+		
+		if (element.is('textarea')) {
+			element.next().css('border', '1px solid red');
+        }
 	},
 	highlight: function (element, errorClass, validClass) {
 		$(element).removeClass("has-success").addClass("has-error");

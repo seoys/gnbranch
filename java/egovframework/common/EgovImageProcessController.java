@@ -108,7 +108,11 @@ public class EgovImageProcessController extends HttpServlet {
 		ByteArrayOutputStream bStream = null;
 
 		try {
-		    file = new File(EgovProperties.getProperty("Globals.fileStorePath"), fvo.getChname_nm());
+			
+			file = new File(EgovProperties.getProperty("Globals.fileStorePath"), fvo.getChname_nm());
+			
+			
+			System.out.println(">>>>>>>" + file);
 		    
 		    fis = new FileInputStream(file);
 

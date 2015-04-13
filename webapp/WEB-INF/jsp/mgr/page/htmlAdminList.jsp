@@ -27,7 +27,7 @@
 							</select>
 							<label for="sel_akindlf">페이지종류</label>
 							<!-- 페이지종류선택 -->
-							<select name="akind_fl" id="sel_akindlf" class="form-control">
+							<select name="akind_fl" id="sel_akindlf" class="form-control" onChange="ipage.kindChange(this.value);">
 								<option value="0">HTML</option>
 								<option value="1">게시판</option>
 							</select>
@@ -40,11 +40,12 @@
 								<option value="2">지부소개</option>
 								<option value="3">연혁</option>
 								<!-- BOARD -->
-								<option value="4">일반게시판</option>
+								<!-- <option value="4">일반게시판</option>
 								<option value="5">일반게시판(기간포함)</option>
 								<option value="6">썸네일형게시판</option>
-								<option value="7">갤러리형게시판</option>
+								<option value="7">갤러리형게시판</option> -->
 							</select>
+							
 							<!-- button -->
 							<a href="#" class="btn btn-default" id="btn_submit">페이지 생성하기</a>
 						</fieldset>
@@ -99,10 +100,10 @@
 										<c:when test="${fn:trim(list.tkind_fl) == '7'}">갤러리형게시판</c:when>
 									</c:choose>
 								</td>
-								<td></td>
+								<td>${list.page_nm}</td>
 								<td>
 									<c:if test="${fn:trim(list.akind_fl) == '0'}">
-									<a href="/mgr/menuTemplateWrite.gn?con_sq=${list.con_sq}&group_sq=${list.group_sq}&akind_fl=${fn:trim(list.akind_fl)}&tkind_fl=${fn:trim(list.tkind_fl)}" class="btn btn-orange">수정</a>
+									<a href="#n" class="btn btn-orange" onClick="ipage.pagelink(${list.con_sq},${list.group_sq},${fn:trim(list.akind_fl)},${fn:trim(list.tkind_fl)});">수정</a>
 									</c:if>
 									<c:if test="${fn:trim(list.akind_fl) == '1'}">
 									<a href="#" target="_blak" class="btn btn-orange">컨텐츠 생성</a>
@@ -161,6 +162,43 @@
 				
 			});
 		});
-	</script>
+	
+		var ipage = {
+				kindChange: function(val){
+					$("#sel_tkindfl").empty();
+					if(val == "0"){
+						$("#sel_tkindfl")
+						.append("<option value='0'>해당없음</option>")
+						.append("<option value='1'>인사말</option>")
+						.append("<option value='2'>지부소개</option>")
+						.append("<option value='3'>연혁</option>");
+					}else if(val == "1"){
+						$("#sel_tkindfl")
+						.append("<option value='4'>일반게시판</option>")
+						.append("<option value='5'>일반게시판(기간포함)</option>")
+						.append("<option value='6'>썸네일형게시판</option>")
+						.append("<option value='7'>갤러리형게시판</option>");
+					};
+				},
+				pagelink: function(arg1,arg2,arg3,arg4){
+					var arg4 = $.trim(arg4);
+					var link = "";
+					
+					if(arg4 == "0"){
+						/* 해당없음 */
+						link = "/mgr/htmlBasicWrite.gn";
+					}else if(arg4 == "1"){
+						/* 인사말 */
+						link = "/mgr/htmlIntroWrite.gn";
+					}else if(arg4 == "2"){
+						
+					}else if(arg4 == "3"){
+						
+					}
+					
+					location.href = link + "?con_sq=" + arg1 + "&group_sq=" + arg2;
+				}
+		};
+</script>
 </body>
 </html>
